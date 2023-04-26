@@ -8,17 +8,17 @@ const express = require("express");
 const socketIO = require("socket.io");
 const qrcode = require("qrcode");
 const http = require("http");
-const phoneNumberFormatter = require("../helpers/formatter");
+const phoneNumberFormatter = require("./helpers/formatter");
 const port = process.env.PORT || 7009;
-const { Requests } = require("./request.js");
-const { api } = require("./api.js");
+const { Requests } = require("./src/request.js");
+const { api } = require("./src/api.js");
 const {
   checkingNumbers,
   checkingAddress,
   codigoetelefone,
-} = require("./middlewares.js");
-const { sosregistrarcodigo } = require("./sosregistrarcodigo.js");
-const { clientecadastro } = require("./clientecadastro.js");
+} = require("./src/middlewares.js");
+const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
+const { clientecadastro } = require("./src/clientecadastro.js");
 
 const app = express();
 const server = http.createServer(app);
