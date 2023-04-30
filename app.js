@@ -9,16 +9,13 @@ const socketIO = require("socket.io");
 const qrcode = require("qrcode");
 const http = require("http");
 const phoneNumberFormatter = require("./helpers/formatter");
-const port = process.env.PORT || 7009;
+const port = process.env.PORT || 7000;
 const { Requests } = require("./src/request.js");
-const { api } = require("./src/api.js");
-const {
-  checkingNumbers,
-  checkingAddress,
-  codigoetelefone,
-} = require("./src/middlewares.js");
+
+const { checkingNumbers, codigoetelefone } = require("./src/middlewares.js");
 const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
 const { clientecadastro } = require("./src/clientecadastro.js");
+const { empresa } = require("./src/empresa.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -72,183 +69,22 @@ client.on("message", (msg) => {
   global(msg);
 
   async function global(msg) {
-    let message = msg.body.toLowerCase();
-    console.log(msg);
-    const msgNumber = await checkingNumbers(msg);
+    
+
+    let msgNumber = await checkingNumbers(msg);
     let etapaRetrieve = await Requests.retrieveEtapa(msg);
-    const codigotelefone = codigoetelefone(msg.from, msgNumber);
+    let codigotelefone = codigoetelefone(msg.from, msgNumber);
 
     // ---------------------Funções----------------------------Funções------------------------------------
     sosregistrarcodigo(msg, etapaRetrieve, client);
 
     clientecadastro(msgNumber, msg, etapaRetrieve, client);
 
-    // if (!codigotelefone || !msgNumber) {
-    //   client.sendMessage(msg.from, `Digite o código corretamente`);
-    // }
-
-    if (codigotelefone && etapaRetrieve.etapa === "a") {
-      client.sendMessage(
-        msg.from,
-        `Oi ${msgNumber.nome} digite o endereço de ENTREGA por favor.
-      
-Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa e cidade.
-      
-Exemplo: rua major pompeu 335 barra bonita SP
-      
-Exemplo 2: rua antonio manfio 42 igaraçu do tiete SP`
-      );
-      await Requests.updateEtapa(msg.from, { etapa: "b" });
-    }
-
-    //     if (retrieve.passo === "b") {
-    //       const address = checkingAddress(msg);
-    //       if (address) {
-    //         Requests.createEntregaEmpresa(msg.from, msg.body);
-
-    //         client.sendMessage(
-    //           msg.from,
-    //           `Tem alguma observação para facilitar para nosso motoboy ?
-
-    // Digite oque quiser, lembrando que o motoboy pode ver essa mensagem.
-
-    // Exemplo: referencia de lugar, numero de telefone ou o valor do troco caso tenha.`
-    //         );
-    //         await Requests.updateEtapa(msg.from, "c");
-    //       }
-    //     }
-
-    //     if (retrieve.passo === "c") {
-    //       const address = checkingAddress(msg);
-    //       if (address) {
-    //         Requests.createEntregaEmpresa(msg.from, msg.body);
-
-    //         client.sendMessage(
-    //           msg.from,
-    //           `Tem alguma observação para facilitar para nosso motoboy ?
-
-    // Digite oque quiser, lembrando que o motoboy pode ver essa mensagem.
-
-    // Exemplo: referencia de lugar, numero de telefone ou o valor do troco caso tenha.`
-    //         );
-    //         await Requests.updateEtapa(msg.from, "d");
-    //       }
-    //     }
+    empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
   }
-  //       // console.log(msg);
-  //       if (dataOne.contact && message === resultNumbers.code) {
-  //         console.log(msg.id.id);
-  //         client.sendMessage(
-  //           msg.from,
-  //           `Digite o endereço de ENTREGA por favor.
-
-  // Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa e cidade.
-
-  // Exemplo: rua major pompeu 335 barra bonita SP
-
-  // Exemplo 2: rua antonio manfio 42 igaraçu do tiete SP`
-  //         );
-  //         console.log(msg);
-  //         // let pow = 0;
-  //         const dataTwo = importantData(msg);
-  //         const address = checkingAddress(msg);
-  //         console.log(dataTwo.contact);
-  //         console.log(address);
-  //         if (dataTwo.contact && address) {
-  //           console.log("XANA" + msg);
-  //           eval("two=false");
-  //           client.sendMessage(
-  //             msg.from,
-  //             `Tem alguma observação para facilitar para nosso motoboy ?
-
-  // Digite oque quiser, lembrando que o motoboy pode ver essa mensagem.
-
-  // Exemplo: referencia de lugar, numero de telefone ou o valor do troco caso tenha.`
-  //           );
-  //         }
-  //       }
-
-  //       if (dataOne.contact && resultNumbers === null) {
-  //         client.sendMessage(msg.from, `Digite o código corretamente.`);
-  //       } else if (dataOne.contact && message === resultNumbers.code) {
-  //         console.log(message + "oi");
-  //         eval("first=false");
-  //         client.sendMessage(
-  //           msg.from,
-  //           `Digite o endereço de ENTREGA por favor.
-
-  // Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa e cidade.
-
-  // Exemplo: rua major pompeu 335 barra bonita SP
-
-  // Exemplo 2: rua antonio manfio 42 igaraçu do tiete SP`
-  //         );
-
-  //         client.on("message", (msg) => {
-  //           const dataTwo = importantData(msg);
-  //           const address = checkingAddress(msg);
-  //           console.log(message + "oi2");
-  //           if (dataTwo.contact && address) {
-  //             eval("two=false");
-  //             client.sendMessage(
-  //               msg.from,
-  //               `Tem alguma observação para facilitar para nosso motoboy ?
-
-  //   Digite oque quiser, lembrando que o motoboy pode ver essa mensagem.
-
-  //   Exemplo: referencia de lugar, numero de telefone ou o valor do troco caso tenha.`
-  //             );
-  //           }
-  //         });
-  //       }
-  // }
-  //         client.on("message", (msg) => {
-  //           const dataTwo = importantData(msg);
-  //           const address = checkingAddress(msg);
-
-  //           if (dataTwo.contact && address) {
-  //             eval("two=false");
-  //             client.sendMessage(
-  //               msg.from,
-  //               `Tem alguma observação para facilitar para nosso motoboy ?
-
-  // Digite oque quiser, lembrando que o motoboy pode ver essa mensagem.
-
-  // Exemplo: referencia de lugar, numero de telefone ou o valor do troco caso tenha.`
-  //             );
-  //             const dataThree = importantData(msg);
-  //             if (dataThree.contact && message) {
-  //               client.on("message", (msg) => {
-  //                 client.sendMessage(
-  //                   msg.from,
-  //                   `Qual é a forma de pagamento ?
-  // 1 - Pix
-  // 2 - Dinheiro
-  // 3 - Cartão`
-  //                 );
-  //               });
-  //             }
-  //             client.on("message", (msg) => {
-  //               if (msg.body === "voltar") {
-  //                 console.log("oi");
-  //                 eval("first=true");
-  //                 global(msg);
-  //               }
-  //             });
-  //           } else if (dataTwo.contact && !address && two === true) {
-  //             client.sendMessage(
-  //               msg.from,
-  //               `Desculpa, não conseguimos entender sua resposta. Lembre-se que o endereço precisa estar neste formato:
-
-  // Exemplo: rua major pompeu 335 barra bonita SP
-
-  // Exemplo 2: rua antonio manfio 42 igaraçu do tiete SP`
-  //             );
-  //           }
-  //         });
-  //       }
-  //     }
 });
+
+// ------------------AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa----------------------------------------
 
 client.initialize();
 

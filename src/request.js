@@ -2,25 +2,25 @@ const { api } = require("./api");
 
 class Requests {
   static async createClient(body) {
-    api.post("/clientes", body);
+    await api.post("/clientes", body);
   }
   static async updateClient(codigo, body) {
-    api.patch(`/clientes/${codigo}`, body);
+    await api.patch(`/clientes/${codigo}`, body);
   }
 
   static async retrieveClient(codigo) {
-    const response = await api.get(`/clientes/${codigo}`);
+    let response = await api.get(`/clientes/${codigo}`);
 
     return response.data;
   }
 
   static async retrieveEtapa(msg) {
-    const final = msg.from.slice(msg.from.length - 4);
+    let final = msg.from.slice(msg.from.length - 4);
     if (final === "c.us") {
-      const responseRetrieve = await api.get(`/etapas/${msg.from}`);
+      let responseRetrieve = await api.get(`/etapas/${msg.from}`);
 
       if (responseRetrieve.data === null) {
-        const responsePost = await api.post(`/etapas`, {
+        let responsePost = await api.post(`/etapas`, {
           telefone: msg.from,
           etapa: "a",
         });
@@ -32,17 +32,18 @@ class Requests {
   }
 
   static async updateEtapa(from, body) {
-    console.log(from);
     await api.patch(`/etapas/${from}`, body);
 
     return true;
   }
 
-  static async createEntregaEmpresa(telefone, token) {
-    await api.post(`/entregas`, {
-      telefone: telefone,
-      tokencoleta: token,
-    });
+  static async createEntregaEmpresa(data) {
+    await api.post(`/entregas`, data);
+  }
+
+  static async updateEntregaEmpresa(data) {
+    let response = await api.patch(`/entregas`, data);
+    return response.data;
   }
 }
 

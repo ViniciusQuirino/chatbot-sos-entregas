@@ -1,19 +1,18 @@
 const { Requests } = require("./request.js");
 
 // ---------------------------Verificar código e numero de telefone------------------------
-function codigoetelefone(from, retrieve) {
-  if (retrieve !== null) {
+function codigoetelefone(from, msgNumber) {
+  if (msgNumber !== null) {
     if (
-      from == retrieve.telefoneum ||
-      from == retrieve.telefonedois ||
-      from == retrieve.telefonetres ||
-      from == retrieve.telefonequatro ||
-      from == retrieve.telefonequatro
+      from == msgNumber.telefoneum ||
+      from == msgNumber.telefonedois ||
+      from == msgNumber.telefonetres ||
+      from == msgNumber.telefonequatro ||
+      from == msgNumber.telefonequatro
     ) {
-      Requests.createEntregaEmpresa(from, retrieve.token);
-
       return true;
     }
+    return false;
   }
 
   return false;
@@ -49,15 +48,20 @@ async function checkingNumbers(msg) {
     nine
   ) {
     const checkingCompanies = await Requests.retrieveClient(cg);
-    return checkingCompanies;
+
+    if (checkingCompanies === null) {
+      return false;
+    } else {
+      return checkingCompanies;
+    }
   }
 
-  return false;
+  return true;
 }
 
 // --------------------------VERIFICAR ENDEREÇO---------------------------------------------
 function checkingAddress(msg) {
-  const message = msg.body.toLowerCase();
+  let message = msg.body.toLowerCase();
 
   const igaracu = message.includes("igaracu do tiete sp");
   const igaraçu = message.includes("igaraçu do tiete sp");
@@ -77,7 +81,7 @@ function checkingAddress(msg) {
   const avn = message.includes("avn");
   const avenida = message.includes("avenida");
 
-  if (message.length > 30) {
+  if (message.length > 27) {
     if (
       igaracu ||
       igaraçu ||
@@ -153,6 +157,24 @@ function naoesquecadoddd(client, from) {
   );
 }
 
+function temalgumaobservacao(client, from) {
+  client.sendMessage(
+    from,
+    `Tem alguma observação para facilitar para nosso motoboy ?
+
+Escreva oque quiser, nosso motoboy irá ver sua observação
+
+Se possivel colocar numero de telefone do cliente, assim não precisamos entrar em contato com o estabelecimento caso o motoboy tenha problemas na hora da entrega.`
+  );
+}
+
+function voltar(from, body, client) {
+  if (body === "voltar") {
+    Requests.updateEtapa(from, { etapa: "a" });
+    client.sendMessage(from, `Você voltou para o inicío. Comece novamente!`);
+  }
+}
+
 module.exports = {
   checkingNumbers,
   checkingAddress,
@@ -162,4 +184,6 @@ module.exports = {
   obrigadocadastroefetuadocomsucesso,
   naoexistenumerotelefonedessetamanho,
   naoesquecadoddd,
+  temalgumaobservacao,
+  voltar,
 };

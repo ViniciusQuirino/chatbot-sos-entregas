@@ -1,19 +1,34 @@
 const { Requests } = require("./request.js");
+const { voltar } = require("./middlewares.js");
 
-function sosregistrarcodigo(msg, etapaRetrieve, client) {
+async function sosregistrarcodigo(msg, etapaRetrieve, client) {
   let message = msg.body.toLowerCase();
-  if (
-    (message === "/registrar/.")
-  ) {
+  if (message === "/registrar/." && etapaRetrieve.etapa === "a") {
     client.sendMessage(msg.from, "Digite o código.");
 
     Requests.updateEtapa(msg.from, { etapa: "x" });
   }
 
   if (etapaRetrieve.etapa === "x") {
-    Requests.createClient({ codigo: msg.body });
-    Requests.updateEtapa(msg.from, { etapa: "y", codigo: msg.body });
-    client.sendMessage(msg.from, "Digite o nome do cliente");
+    voltar(msg.from, message, client);
+    if (msg.body.length === 3) {
+      try {
+        await Requests.createClient({ codigo: msg.body });
+
+        Requests.updateEtapa(msg.from, { etapa: "y", codigo: msg.body });
+        client.sendMessage(msg.from, "Digite o nome do cliente");
+      } catch (error) {
+        if (error?.response?.data.message) {
+          client.sendMessage(
+            msg.from,
+            "Já existe um cliente cadastrado com esse código."
+          );
+        }
+      }
+    }
+    if (msg.body !== "voltar" && msg.body.length !== 3) {
+      client.sendMessage(msg.from, "O código precisa ser de 3 digitos.");
+    }
   }
 
   if (etapaRetrieve.etapa === "y") {
