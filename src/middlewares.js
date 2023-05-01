@@ -110,6 +110,116 @@ function checkingAddress(msg) {
   return false;
 }
 
+async function listarentregasequantidade(msg, client) {
+  let message = msg.body.toLowerCase();
+  let listar = message.includes("listar/entregas");
+
+  if (listar) {
+    let final = message.slice(message.length - 5);
+    const data = final.replace("/", "");
+
+    if (data.length == 4) {
+      try {
+        let response = await Requests.listEntregasEmpresa(
+          data,
+          msg.from,
+          client
+        );
+        client.sendMessage(
+          msg.from,
+          `Data: ${final}
+Quantidade de entregas: ${response}`
+        );
+      } catch (error) {
+        client.sendMessage(
+          msg.from,
+          `A data precisa ter 5 digitos, não se esqueça`
+        );
+      }
+    }
+  }
+}
+
+async function listartodosclientescadastrados(msg, client) {
+  let message = msg.body.toLowerCase();
+  let listar = message.includes("listar/clientes");
+
+  if (listar) {
+    const response = await Requests.listAllClient();
+    let texto = "";
+    for (let dados of response) {
+      texto += `
+----------------------
+Código: ${dados.codigo}
+Nome: ${dados.nome ? dados.nome : "Sem registro"}
+Telefone 1: ${dados.telefoneum ? dados.telefoneum.slice(0, 13) : "Sem registro"}
+Telefone 2: ${
+        dados.telefonedois ? dados.telefonedois.slice(0, 13) : "Sem registro"
+      }
+Telefone 3: ${
+        dados.telefonetres ? dados.telefonetres.slice(0, 13) : "Sem registro"
+      }
+Telefone 4: ${
+        dados.telefonequatro
+          ? dados.telefonequatro.slice(0, 13)
+          : "Sem registro"
+      }
+Telefone 5: ${
+        dados.telefonecinco ? dados.telefonecinco.slice(0, 13) : "Sem registro"
+      }`;
+    }
+    client.sendMessage(msg.from, texto);
+    client.sendMessage(
+      msg.from,
+      `Quantidade de clientes cadastrados: ${response.length}`
+    );
+  }
+}
+
+async function buscardadosdecadastradodaempresa(msg, client, msgNumber) {
+  if (msgNumber) {
+    if (msg.body === msgNumber.codigo + "/dados") {
+      const dados = `Código: ${msgNumber.codigo}
+Nome: ${msgNumber.nome}
+Token: ${msgNumber.token}
+Telefone 1: ${
+        msgNumber.telefoneum
+          ? msgNumber.telefoneum.slice(0, 13)
+          : "Sem registro"
+      }
+Telefone 2: ${
+        msgNumber.telefonedois
+          ? msgNumber.telefonedois.slice(0, 13)
+          : "Sem registro"
+      }
+Telefone 3: ${
+        msgNumber.telefonetres
+          ? msgNumber.telefonetres.slice(0, 13)
+          : "Sem registro"
+      }
+Telefone 4: ${
+        msgNumber.telefonequatro
+          ? msgNumber.telefonequatro.slice(0, 13)
+          : "Sem registro"
+      }
+Telefone 5: ${
+        msgNumber.telefonecinco
+          ? msgNumber.telefonecinco.slice(0, 13)
+          : "Sem registro"
+      }`;
+
+      client.sendMessage(msg.from, dados);
+    }
+  }
+}
+
+function deletarentregas(msg, client) {
+  if (msg.body == "deletar/entregas") {
+    Requests.deletarEntregasEmpresa();
+    client.sendMessage(msg.from, "Todas as entregas foram deletadas.");
+  }
+}
+
 function desejacadastrarmaisnumeros(client, from) {
   client.sendMessage(
     from,
@@ -186,4 +296,8 @@ module.exports = {
   naoesquecadoddd,
   temalgumaobservacao,
   voltar,
+  listarentregasequantidade,
+  listartodosclientescadastrados,
+  buscardadosdecadastradodaempresa,
+  deletarentregas,
 };

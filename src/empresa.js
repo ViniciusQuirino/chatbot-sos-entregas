@@ -24,8 +24,8 @@ Exemplo: rua major pompeu 000 barra bonita
         
 Exemplo 2: rua antonio manfio 00 igaraçu do tiete`
     );
-    await Requests.updateEtapa(msg.from, { etapa: "b" });
-    await Requests.createEntregaEmpresa({
+    Requests.updateEtapa(msg.from, { etapa: "b" });
+    Requests.createEntregaEmpresa({
       telefone: msg.from,
       tokencoleta: msgNumber.token,
       codigo: msg.body,
@@ -37,9 +37,9 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tiete`
     const address = checkingAddress(msg);
 
     if (address) {
-      await Requests.updateEntregaEmpresa({
+      Requests.updateEntregaEmpresa({
         telefone: msg.from,
-        entrega: msg.body + "sp",
+        entrega: msg.body + " sp",
       });
       client.sendMessage(
         msg.from,
@@ -49,8 +49,8 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tiete`
 2 - Dinheiro
 3 - Pago`
       );
-      const response = await Requests.updateEtapa(msg.from, { etapa: "c" });
-    } else {
+      Requests.updateEtapa(msg.from, { etapa: "c" });
+    } else if (!address && message !== "voltar") {
       client.sendMessage(
         msg.from,
         `Esse endereço não é valido, tente novamente!
@@ -68,32 +68,32 @@ rua major pompeu 000 barra bonita`
     let dois = msg.body.includes("2");
     let tres = msg.body.includes("3");
     if (um) {
-      await Requests.updateEntregaEmpresa({
+      Requests.updateEntregaEmpresa({
         telefone: msg.from,
         formadepagamento: "card",
       });
       temalgumaobservacao(client, msg.from);
-      await Requests.updateEtapa(msg.from, { etapa: "d" });
+      Requests.updateEtapa(msg.from, { etapa: "d" });
     }
     if (dois) {
-      await Requests.updateEntregaEmpresa({
+      Requests.updateEntregaEmpresa({
         telefone: msg.from,
         formadepagamento: "money",
       });
       temalgumaobservacao(client, msg.from);
-      await Requests.updateEtapa(msg.from, { etapa: "d" });
+      Requests.updateEtapa(msg.from, { etapa: "d" });
     }
 
     if (tres) {
-      await Requests.updateEntregaEmpresa({
+      Requests.updateEntregaEmpresa({
         telefone: msg.from,
         formadepagamento: "pix",
       });
       temalgumaobservacao(client, msg.from);
-      await Requests.updateEtapa(msg.from, { etapa: "d" });
+      Requests.updateEtapa(msg.from, { etapa: "d" });
     }
 
-    if (!um && !dois && !tres) {
+    if (!um && !dois && !tres && message !== "voltar") {
       client.sendMessage(
         msg.from,
         `Desculpa, não consegui entender sua resposta.
@@ -110,43 +110,70 @@ Por favor, escolha uma das opções ⬇️
   }
 
   if (etapaRetrieve.etapa === "d") {
-    client.sendMessage(
-      msg.from,
-      `Obrigado, seu pedido foi feito com sucesso!
-
+    voltar(msg.from, message, client);
+    if (message !== "voltar") {
+      const response = await Requests.updateEntregaEmpresa({
+        telefone: msg.from,
+        obs: msg.body,
+      });
+      client.sendMessage(
+        msg.from,
+        `Obrigado, seu pedido foi feito com sucesso! 😁
+  
 Assim que um de nossos entregadores aceitar seu pedido você será notificado.
 
 Lembrando que coletas são de 0 a 15 minutos em dias normais.
-`
-    );
 
-    await Requests.updateEtapa(msg.from, { etapa: "a" });
-    const response = await Requests.updateEntregaEmpresa({
-      telefone: msg.from,
-      obs: msg.body,
-    });
+Numero do pedido: ${response.id}
+Endereço de entrega: ${response.entrega}
+Observação: ${response.obs}`
+      );
 
-    const data = {
-      id: response.id,
-      status: "open",
-      paymentMethod: response.formadepagamento,
-      notes: response.obs,
-      deliveryPoint: {
-        address: response.entrega,
-      },
-    };
+      Requests.updateEtapa(msg.from, { etapa: "a" });
 
-    await fetch("https://app.foodydelivery.com/rest/1.2/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: response.tokencoleta,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res) => res)
-      .catch((err) => console.log(err));
+      const data = {
+        id: response.id,
+        status: "open",
+        paymentMethod: response.formadepagamento,
+        notes: response.obs,
+        deliveryPoint: {
+          address: response.entrega,
+        },
+      };
+
+      const responseFood = await fetch(
+        "https://app.foodydelivery.com/rest/1.2/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: response.tokencoleta,
+          },
+          body: JSON.stringify(data),
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => res)
+        .catch((err) => console.log(err));
+
+      const dados = {
+        telefone: msg.from,
+        iddatabase: response.id,
+        entrega: response.entrega,
+        entregaidfood: responseFood.uid,
+      };
+
+      fetch("https://webhooks-sos.up.railway.app/webhook/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dados),
+      })
+        .then((res) => res.json())
+        .then((res) => res)
+        .catch((err) => console.log(err));
+    }
   }
 }
 

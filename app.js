@@ -12,7 +12,14 @@ const phoneNumberFormatter = require("./helpers/formatter");
 const port = process.env.PORT || 7000;
 const { Requests } = require("./src/request.js");
 
-const { checkingNumbers, codigoetelefone } = require("./src/middlewares.js");
+const {
+  checkingNumbers,
+  codigoetelefone,
+  listarentregasequantidade,
+  listartodosclientescadastrados,
+  buscardadosdecadastradodaempresa,
+  deletarentregas,
+} = require("./src/middlewares.js");
 const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
 const { clientecadastro } = require("./src/clientecadastro.js");
 const { empresa } = require("./src/empresa.js");
@@ -69,8 +76,6 @@ client.on("message", (msg) => {
   global(msg);
 
   async function global(msg) {
-    
-
     let msgNumber = await checkingNumbers(msg);
     let etapaRetrieve = await Requests.retrieveEtapa(msg);
     let codigotelefone = codigoetelefone(msg.from, msgNumber);
@@ -81,6 +86,14 @@ client.on("message", (msg) => {
     clientecadastro(msgNumber, msg, etapaRetrieve, client);
 
     empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
+
+    listarentregasequantidade(msg, client);
+
+    listartodosclientescadastrados(msg, client);
+
+    buscardadosdecadastradodaempresa(msg, client, msgNumber);
+
+    deletarentregas(msg, client);
   }
 });
 
@@ -173,7 +186,7 @@ app.post(
 );
 
 server.listen(port, function () {
-  console.log("App running on *: " + port + " - http://localhost:7009/");
+  console.log(`App running on *: http://localhost:${port}`);
 });
 
 //   // --------------------------------------------------------------------------------------

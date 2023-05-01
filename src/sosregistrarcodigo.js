@@ -13,7 +13,7 @@ async function sosregistrarcodigo(msg, etapaRetrieve, client) {
     voltar(msg.from, message, client);
     if (msg.body.length === 3) {
       try {
-        await Requests.createClient({ codigo: msg.body });
+         Requests.createClient({ codigo: msg.body });
 
         Requests.updateEtapa(msg.from, { etapa: "y", codigo: msg.body });
         client.sendMessage(msg.from, "Digite o nome do cliente");
@@ -26,7 +26,7 @@ async function sosregistrarcodigo(msg, etapaRetrieve, client) {
         }
       }
     }
-    if (msg.body !== "voltar" && msg.body.length !== 3) {
+    if (message !== "voltar" && msg.body.length !== 3) {
       client.sendMessage(msg.from, "O código precisa ser de 3 digitos.");
     }
   }
