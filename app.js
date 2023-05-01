@@ -188,7 +188,7 @@ app.post(
   }
 );
 
-server.listen(port, "0.0.0.0", function () {
+server.listen(+port, "0.0.0.0", function () {
   console.log(`App running on *: http://localhost:${port}`);
 });
 

@@ -4,3 +4,4 @@ package-lock.json
 downloaded-media/
 .env
 .wwebjs_auth
+Dockerfile
