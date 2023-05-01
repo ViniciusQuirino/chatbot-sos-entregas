@@ -220,6 +220,17 @@ function deletarentregas(msg, client) {
   }
 }
 
+function deletarcliente(msg, client) {
+  let message = msg.body.toLowerCase();
+  let listar = message.includes("deletar/cliente");
+  if (listar) {
+    let final = message.slice(message.length - 3);
+    Request.deleteClient(final);
+
+    client.sendMessage(msg.from, "Cliente deletado com sucesso!");
+  }
+}
+
 function desejacadastrarmaisnumeros(client, from) {
   client.sendMessage(
     from,
@@ -300,4 +311,5 @@ module.exports = {
   listartodosclientescadastrados,
   buscardadosdecadastradodaempresa,
   deletarentregas,
+  deletarcliente,
 };

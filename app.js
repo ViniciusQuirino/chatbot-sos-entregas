@@ -19,6 +19,7 @@ const {
   listartodosclientescadastrados,
   buscardadosdecadastradodaempresa,
   deletarentregas,
+  deletarcliente,
 } = require("./src/middlewares.js");
 const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
 const { clientecadastro } = require("./src/clientecadastro.js");
@@ -94,6 +95,8 @@ client.on("message", (msg) => {
     buscardadosdecadastradodaempresa(msg, client, msgNumber);
 
     deletarentregas(msg, client);
+
+    deletarcliente(msg, client);
   }
 });
 
@@ -185,7 +188,7 @@ app.post(
   }
 );
 
-server.listen(port, function () {
+server.listen(port, "0.0.0.0", function () {
   console.log(`App running on *: http://localhost:${port}`);
 });
 

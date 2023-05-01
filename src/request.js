@@ -21,6 +21,13 @@ class Requests {
     return response.data;
   }
 
+  static async deleteClient(codigo) {
+    let response = await api.delete(`/clientes/${codigo}`);
+
+    return response.data;
+  }
+
+
   static async retrieveEtapa(msg) {
     let final = msg.from.slice(msg.from.length - 4);
     if (final === "c.us") {
