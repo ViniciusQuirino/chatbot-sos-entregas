@@ -8,7 +8,7 @@ const express = require("express");
 const socketIO = require("socket.io");
 const qrcode = require("qrcode");
 const http = require("http");
-const phoneNumberFormatter = require("./helpers/formatter");
+const { phoneNumberFormatter } = require("./helpers/formatter");
 const port = process.env.PORT || 7000;
 const { Requests } = require("./src/request.js");
 
