@@ -24,6 +24,7 @@ const {
 const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
 const { clientecadastro } = require("./src/clientecadastro.js");
 const { empresa } = require("./src/empresa.js");
+const { fisica } = require("./src/fisica.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -77,7 +78,7 @@ client.on("message", (msg) => {
   global(msg);
 
   async function global(msg) {
-    let msgNumber = await checkingNumbers(msg);
+    let msgNumber = await checkingNumbers(msg, client);
     let etapaRetrieve = await Requests.retrieveEtapa(msg);
     let codigotelefone = codigoetelefone(msg.from, msgNumber);
 
@@ -97,6 +98,8 @@ client.on("message", (msg) => {
     deletarentregas(msg, client);
 
     deletarcliente(msg, client);
+
+    // fisica(msg, etapaRetrieve, client);
   }
 });
 

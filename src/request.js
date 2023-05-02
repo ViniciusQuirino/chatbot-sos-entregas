@@ -1,9 +1,10 @@
 const { api } = require("./api");
-const axios = require("axios");
 
 class Requests {
   static async createClient(body) {
-    await api.post("/clientes", body);
+    const response = await api.post("/clientes", body);
+
+    return response;
   }
   static async updateClient(codigo, body) {
     await api.patch(`/clientes/${codigo}`, body);
@@ -26,7 +27,6 @@ class Requests {
 
     return response.data;
   }
-
 
   static async retrieveEtapa(msg) {
     let final = msg.from.slice(msg.from.length - 4);

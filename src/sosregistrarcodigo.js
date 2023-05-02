@@ -13,17 +13,15 @@ async function sosregistrarcodigo(msg, etapaRetrieve, client) {
     voltar(msg.from, message, client);
     if (msg.body.length === 3) {
       try {
-         Requests.createClient({ codigo: msg.body });
+        await Requests.createClient({ codigo: msg.body });
 
         Requests.updateEtapa(msg.from, { etapa: "y", codigo: msg.body });
         client.sendMessage(msg.from, "Digite o nome do cliente");
       } catch (error) {
-        if (error?.response?.data.message) {
-          client.sendMessage(
-            msg.from,
-            "Já existe um cliente cadastrado com esse código."
-          );
-        }
+        client.sendMessage(
+          msg.from,
+          "Já existe um cliente cadastrado com esse código."
+        );
       }
     }
     if (message !== "voltar" && msg.body.length !== 3) {
@@ -32,9 +30,12 @@ async function sosregistrarcodigo(msg, etapaRetrieve, client) {
   }
 
   if (etapaRetrieve.etapa === "y") {
-    Requests.updateClient(etapaRetrieve.codigo, { nome: msg.body });
-    Requests.updateEtapa(msg.from, { etapa: "a" });
-    client.sendMessage(msg.from, "Cliente cadastrado com sucesso.");
+    voltar(msg.from, message, client);
+    if (message !== "voltar") {
+      Requests.updateClient(etapaRetrieve.codigo, { nome: msg.body });
+      Requests.updateEtapa(msg.from, { etapa: "a" });
+      client.sendMessage(msg.from, "Cliente cadastrado com sucesso.");
+    }
   }
 }
 

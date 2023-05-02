@@ -20,7 +20,7 @@ function codigoetelefone(from, msgNumber) {
 
 //----------------------------VERIFICAR SE A CONVERSA COMEÇA COM NUMEROS------------------------------------------
 
-async function checkingNumbers(msg) {
+async function checkingNumbers(msg, client) {
   const cg = msg.body.substring(0, 3);
 
   const message = cg.toLowerCase();
@@ -221,12 +221,12 @@ function deletarentregas(msg, client) {
   }
 }
 
-function deletarcliente(msg,client){
+function deletarcliente(msg, client) {
   let message = msg.body.toLowerCase();
   let listar = message.includes("deletar/cliente");
   if (listar) {
     let final = message.slice(message.length - 3);
-    Requests.deleteClient(final)
+    Requests.deleteClient(final);
 
     client.sendMessage(msg.from, "Cliente deletado com sucesso!");
   }
@@ -312,5 +312,5 @@ module.exports = {
   listartodosclientescadastrados,
   buscardadosdecadastradodaempresa,
   deletarentregas,
-  deletarcliente
+  deletarcliente,
 };
