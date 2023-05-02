@@ -214,7 +214,8 @@ Telefone 5: ${
 }
 
 function deletarentregas(msg, client) {
-  if (msg.body == "deletar/entregas") {
+  let message = msg.body.toLowerCase();
+  if (message == "deletar/entregas") {
     Requests.deletarEntregasEmpresa();
     client.sendMessage(msg.from, "Todas as entregas foram deletadas.");
   }
