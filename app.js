@@ -20,12 +20,12 @@ const {
   buscardadosdecadastradodaempresa,
   deletarentregas,
   deletarcliente,
-  ativarchatbot
+  // ativarchatbot
 } = require("./src/middlewares.js");
 const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
 const { clientecadastro } = require("./src/clientecadastro.js");
 const { empresa } = require("./src/empresa.js");
-const { fisica } = require("./src/fisica.js");
+// const { fisica } = require("./src/fisica.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -82,18 +82,18 @@ client.on("message", (msg) => {
     let msgNumber = await checkingNumbers(msg, client);
     let etapaRetrieve = await Requests.retrieveEtapa(msg);
     let codigotelefone = codigoetelefone(msg.from, msgNumber);
-    let buscarseexistetelefonenobanco = await Requests.buscartelefonenobanco(
-      msg.from
-    );
-    console.log(buscarseexistetelefonenobanco);
+    // let buscarseexistetelefonenobanco = await Requests.buscartelefonenobanco(
+    //   msg.from
+    // );
+    // console.log(buscarseexistetelefonenobanco);
     // ---------------------Funções----------------------------Funções------------------------------------
 
     if (etapaRetrieve !== undefined) {
-      if (buscarseexistetelefonenobanco) {
-        sosregistrarcodigo(msg, etapaRetrieve, client);
-        clientecadastro(msgNumber, msg, etapaRetrieve, client);
-        empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
-      }
+      // if (buscarseexistetelefonenobanco) {
+      sosregistrarcodigo(msg, etapaRetrieve, client);
+      clientecadastro(msgNumber, msg, etapaRetrieve, client);
+      empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
+      // }
       // fisica(msg, etapaRetrieve, client, buscarseexistetelefonenobanco);
     }
 
