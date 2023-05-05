@@ -92,6 +92,12 @@ Pagamento: ${dados.formadepagamento ? dados.formadepagamento : "Sem registro"}`;
 
     await api.delete("/entregas");
   }
+
+  static async buscartelefonenobanco(telefone) {
+    const response = await api.get(`/fisica/${telefone}`);
+
+    return response.data;
+  }
 }
 
 module.exports = { Requests };

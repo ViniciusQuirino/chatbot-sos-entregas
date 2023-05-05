@@ -20,6 +20,7 @@ const {
   buscardadosdecadastradodaempresa,
   deletarentregas,
   deletarcliente,
+  ativarchatbot
 } = require("./src/middlewares.js");
 const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
 const { clientecadastro } = require("./src/clientecadastro.js");
@@ -81,13 +82,20 @@ client.on("message", (msg) => {
     let msgNumber = await checkingNumbers(msg, client);
     let etapaRetrieve = await Requests.retrieveEtapa(msg);
     let codigotelefone = codigoetelefone(msg.from, msgNumber);
-
+    let buscarseexistetelefonenobanco = await Requests.buscartelefonenobanco(
+      msg.from
+    );
+    console.log(buscarseexistetelefonenobanco);
     // ---------------------Funções----------------------------Funções------------------------------------
-    sosregistrarcodigo(msg, etapaRetrieve, client);
 
-    clientecadastro(msgNumber, msg, etapaRetrieve, client);
-
-    empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
+    if (etapaRetrieve !== undefined) {
+      if (buscarseexistetelefonenobanco) {
+        sosregistrarcodigo(msg, etapaRetrieve, client);
+        clientecadastro(msgNumber, msg, etapaRetrieve, client);
+        empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
+      }
+      // fisica(msg, etapaRetrieve, client, buscarseexistetelefonenobanco);
+    }
 
     listarentregasequantidade(msg, client);
 
@@ -99,7 +107,7 @@ client.on("message", (msg) => {
 
     deletarcliente(msg, client);
 
-    // fisica(msg, etapaRetrieve, client);
+    // ativarchatbot(msg, client);
   }
 });
 
@@ -191,7 +199,7 @@ app.post(
   }
 );
 
-server.listen(+port, "0.0.0.0", function () {
+server.listen(+port, function () {
   console.log(`App running on *: http://localhost:${port}`);
 });
 

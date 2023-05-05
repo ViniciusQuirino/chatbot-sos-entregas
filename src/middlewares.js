@@ -213,6 +213,19 @@ Telefone 5: ${
   }
 }
 
+async function ativarchatbot(msg, client) {
+  let message = msg.body.toLowerCase();
+  let ativar = message.includes("ativar");
+  let telefone = message.slice(7, message.length);
+
+  if (ativar) {
+    if (msg.from == "5514996056869@c.us")
+      Requests.updateEtapa(`55${telefone}@c.us`, { ativado: true, etapa: "a" });
+
+    client.sendMessage(msg.from, "Chatbot ativado.");
+  }
+}
+
 function deletarentregas(msg, client) {
   let message = msg.body.toLowerCase();
   if (message == "deletar/entregas") {
@@ -313,4 +326,5 @@ module.exports = {
   buscardadosdecadastradodaempresa,
   deletarentregas,
   deletarcliente,
+  ativarchatbot,
 };
