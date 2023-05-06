@@ -163,7 +163,7 @@ Observação: ${response.obs}`
         entregaidfood: responseFood.uid,
       };
 
-      fetch("https://webhooks-sos.up.railway.app/webhook/create", {
+      fetch("https://database-sos.up.railway.app/webhook/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
