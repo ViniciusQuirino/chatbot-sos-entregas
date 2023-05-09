@@ -55,7 +55,7 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tiete`
         msg.from,
         `Esse endereço não é valido, tente novamente!
         
-precisamos que seja no formato desse exemplo:
+precisamos que seja no formato do exemplo. Rua, numero e cidade.
 
 rua major pompeu 000 barra bonita`
       );
