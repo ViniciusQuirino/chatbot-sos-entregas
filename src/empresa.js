@@ -116,20 +116,6 @@ Por favor, escolha uma das opções ⬇️
         telefone: msg.from,
         obs: msg.body,
       });
-      client.sendMessage(
-        msg.from,
-        `Obrigado, seu pedido foi feito com sucesso! 😁
-  
-Assim que um de nossos entregadores aceitar seu pedido você será notificado.
-
-Lembrando que coletas são de 0 a 15 minutos em dias normais.
-
-Numero do pedido: ${response.id}
-Endereço de entrega: ${response.entrega}
-Observação: ${response.obs}`
-      );
-
-      Requests.updateEtapa(msg.from, { etapa: "a" });
 
       const data = {
         id: response.id,
@@ -156,23 +142,46 @@ Observação: ${response.obs}`
         .then((res) => res)
         .catch((err) => console.log(err));
 
-      const dados = {
-        telefone: msg.from,
-        iddatabase: response.id,
-        entrega: response.entrega,
-        entregaidfood: responseFood.uid,
-      };
+      if (responseFood.errorCode) {
+        client.sendMessage(
+          msg.from,
+          "Por algum motivo ouve uma falha no lançamento da entrega, tente novamente começando do início ⚠️"
+        );
+        Requests.updateEtapa(msg.from, { etapa: "a" });
+      } else {
+        const dados = {
+          telefone: msg.from,
+          iddatabase: response.id,
+          entrega: response.entrega,
+          entregaidfood: responseFood.uid,
+        };
 
-      fetch("https://database-sos.up.railway.app/webhook/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dados),
-      })
-        .then((res) => res.json())
-        .then((res) => res)
-        .catch((err) => console.log(err));
+        fetch("https://database-sos.up.railway.app/webhook/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dados),
+        })
+          .then((res) => res.json())
+          .then((res) => res)
+          .catch((err) => console.log(err));
+
+        client.sendMessage(
+          msg.from,
+          `Obrigado, seu pedido foi feito com sucesso! 😁
+      
+    Assim que um de nossos entregadores aceitar seu pedido você será notificado.
+    
+    Lembrando que coletas são de 0 a 15 minutos em dias normais.
+    
+    Numero do pedido: ${response.id}
+    Endereço de entrega: ${response.entrega}
+    Observação: ${response.obs}`
+        );
+
+        Requests.updateEtapa(msg.from, { etapa: "a" });
+      }
     }
   }
 }

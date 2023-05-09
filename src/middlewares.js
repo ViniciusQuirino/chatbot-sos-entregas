@@ -63,9 +63,9 @@ async function checkingNumbers(msg, client) {
 function checkingAddress(msg) {
   let message = msg.body.toLowerCase();
 
-  const igaracu = message.includes("igaracu do tiete sp");
-  const igaraçu = message.includes("igaraçu do tiete sp");
-  const barra = message.includes("barra bonita sp");
+  const igaracu = message.includes("igaracu do tiete");
+  const igaraçu = message.includes("igaraçu do tiete");
+  const barra = message.includes("barra bonita");
   const zero = message.includes("0");
   const one = message.includes("1");
   const two = message.includes("2");
@@ -82,31 +82,29 @@ function checkingAddress(msg) {
   const avenida = message.includes("avenida");
 
   if (message.length > 27) {
-    if (
-      igaracu ||
-      igaraçu ||
-      barra ||
-      zero ||
-      one ||
-      two ||
-      three ||
-      four ||
-      five ||
-      six ||
-      seven ||
-      eight ||
-      nine ||
-      rua ||
-      av ||
-      avn ||
-      avenida
-    ) {
-      return true;
+    if (igaracu || igaraçu || barra) {
+      if (
+        zero ||
+        one ||
+        two ||
+        three ||
+        four ||
+        five ||
+        six ||
+        seven ||
+        eight ||
+        nine ||
+        rua ||
+        av ||
+        avn ||
+        avenida
+      ) {
+        return true;
+      }
+      return false;
     }
-
     return false;
   }
-
   return false;
 }
 
