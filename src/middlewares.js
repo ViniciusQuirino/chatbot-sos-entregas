@@ -63,8 +63,10 @@ async function checkingNumbers(msg, client) {
 function checkingAddress(msg) {
   let message = msg.body.toLowerCase();
 
-  const igaracu = message.includes("igaracu do tiete");
-  const igaraçu = message.includes("igaraçu do tiete");
+  const igaracuone = message.includes("igaracu do tiete");
+  const igaraçutwo = message.includes("igaraçu do tiete");
+  const igaraçuthree = message.includes("igaraçu do tietê");
+  const igaraçufour = message.includes("igaracu do tietê");
   const barra = message.includes("barra bonita");
   const zero = message.includes("0");
   const one = message.includes("1");
