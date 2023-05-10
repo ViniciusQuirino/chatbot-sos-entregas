@@ -64,9 +64,9 @@ function checkingAddress(msg) {
   let message = msg.body.toLowerCase();
 
   const igaracuone = message.includes("igaracu do tiete");
-  const igaraçutwo = message.includes("igaraçu do tiete");
-  const igaraçuthree = message.includes("igaraçu do tietê");
-  const igaraçufour = message.includes("igaracu do tietê");
+  const igaracutwo = message.includes("igaraçu do tiete");
+  const igaracuthree = message.includes("igaraçu do tietê");
+  const igaracufour = message.includes("igaracu do tietê");
   const barra = message.includes("barra bonita");
   const zero = message.includes("0");
   const one = message.includes("1");
@@ -84,7 +84,7 @@ function checkingAddress(msg) {
   const avenida = message.includes("avenida");
 
   if (message.length > 27) {
-    if (igaracu || igaraçu || barra) {
+    if (igaracuone || igaracutwo || igaracuthree || igaracufour || barra) {
       if (
         zero ||
         one ||
