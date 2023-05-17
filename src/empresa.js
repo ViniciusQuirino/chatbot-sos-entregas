@@ -7,7 +7,7 @@ const { voltar } = require("./middlewares.js");
 
 async function empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client) {
   let message = msg.body.toLowerCase();
- 
+
   if (!codigotelefone && !msgNumber && etapaRetrieve.etapa === "a") {
     client.sendMessage(msg.from, `Digite o código corretamente`);
   }
@@ -56,9 +56,9 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
         msg.from,
         `Esse endereço não é valido, tente novamente!
         
-precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja no formato do exemplo. Rua, numero e cidade.
 
-rua major pompeu 000 barra bonita`
+Rua major pompeu 000 barra bonita`
       );
     }
   }

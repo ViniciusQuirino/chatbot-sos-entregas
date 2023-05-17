@@ -5,7 +5,6 @@ const {
   checkingAddress,
   temalgumaobservacaofisica,
   obrigadoseupedidofoifeitocomsucesso,
-  cronJob,
 } = require("./middlewares.js");
 
 // msgNumber = Dados do cliente
@@ -53,22 +52,22 @@ Digite apenas o numero da opção.
         msg.from,
         `Agradecemos por entrar em contato conosco. Pedimos que aguarde um minuto, pois um de nossos representantes estará prontamente disponível para atendê-lo. `
       );
-
+      // CRIS
+      client.sendMessage("5514991342480@c.us", `${telefone}`);
       client.sendMessage(
-        "5514998536591@c.us",
+        "5514991342480@c.us",
         `Atenção! Temos um cliente aguardando para falar com um de nossos representantes.
 
 O chatbot foi desativado temporariamente. Por favor, não se esqueça de reativá-lo após o término da conversa, para que o cliente possa continuar a receber assistência automatizada.`
       );
-      client.sendMessage("5514998536591@c.us", `${telefone}`);
+      // VIERA
+      client.sendMessage("5514996977366@c.us", `${telefone}`);
+      client.sendMessage(
+        "5514996977366@c.us",
+        `Atenção! Temos um cliente aguardando para falar com um de nossos representantes.
 
-      //       client.sendMessage(
-      //         "5514996056869@c.us",
-      //         `Tem um cliente querendo falar com um representante.
-
-      // O chatbot foi desativado. Não se esqueça de ativar novamente para esse cliente após o final da conversa.`
-      //       );
-      //       client.sendMessage("5514996056869@c.us", `${telefone}`);
+O chatbot foi desativado temporariamente. Por favor, não se esqueça de reativá-lo após o término da conversa, para que o cliente possa continuar a receber assistência automatizada.`
+      );
 
       Requests.updateEtapa(msg.from, { ativado: false, etapa: "ç" });
     } else if (msg.body != "1" && msg.body != "2" && message !== "voltar") {
@@ -200,9 +199,9 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
         msg.from,
         `Esse endereço não é valido, tente novamente!
         
-precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja no formato do exemplo. Rua, numero e cidade.
 
-rua major pompeu 000 barra bonita`
+Rua major pompeu 000 barra bonita`
       );
     }
   }
@@ -230,9 +229,9 @@ rua major pompeu 000 barra bonita`
         msg.from,
         `Esse endereço não é valido, tente novamente!
         
-precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja no formato do exemplo. Rua, numero e cidade.
 
-rua major pompeu 000 barra bonita`
+Rua major pompeu 000 barra bonita`
       );
     }
   }
@@ -363,9 +362,9 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
         msg.from,
         `Esse endereço não é valido, tente novamente!
       
-precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja no formato do exemplo. Rua, numero e cidade.
 
-rua major pompeu 000 barra bonita`
+Rua major pompeu 000 barra bonita`
       );
     }
   }
@@ -379,11 +378,12 @@ rua major pompeu 000 barra bonita`
         telefone: msg.from,
         entrega: msg.body,
       });
-
       client.sendMessage(
         msg.from,
         `Neste momento, estamos realizando a consulta do valor da entrega para você. Pedimos que aguarde um momento enquanto buscamos essa informação em nosso sistema. Estamos empenhados em fornecer-lhe uma resposta precisa e rápida.`
       );
+
+      // CRIS
       client.sendMessage(
         "5514998536591@c.us",
         `Você deseja mesmo assim finalizar o pedido de entrega ?
@@ -393,9 +393,23 @@ Escolha por favor uma das opções
 1 - Sim, desejo continuar
 2 - Não.`
       );
-
       client.sendMessage(
         "5514998536591@c.us",
+        `Atenção! Temos um cliente aguardando para consultar o valor da entrega.`
+      );
+
+      // VIERA
+      client.sendMessage(
+        "5514996977366@c.us",
+        `Você deseja mesmo assim finalizar o pedido de entrega ?
+  
+Escolha por favor uma das opções
+
+1 - Sim, desejo continuar
+2 - Não.`
+      );
+      client.sendMessage(
+        "5514996977366@c.us",
         `Atenção! Temos um cliente aguardando para consultar o valor da entrega.`
       );
     } else if (!address && message !== "voltar") {
@@ -403,9 +417,9 @@ Escolha por favor uma das opções
         msg.from,
         `Esse endereço não é valido, tente novamente!
       
-precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja no formato do exemplo. Rua, numero e cidade.
 
-rua major pompeu 000 barra bonita`
+Rua major pompeu 000 barra bonita`
       );
     }
   }
