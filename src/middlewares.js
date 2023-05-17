@@ -423,7 +423,7 @@ Forma de pagamento: ${response.formadepagamento == "pix" ? "Pix" : "Dinheiro"}`
 }
 
 function cronJob() {
-  const job = new CronJob("* * * * *", async () => {
+  const job = new CronJob("0 * * * *", async () => {
     Requests.requestCronJob();
   });
   job.start();

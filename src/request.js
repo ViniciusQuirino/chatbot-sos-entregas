@@ -88,7 +88,7 @@ Pagamento: ${dados.formadepagamento ? dados.formadepagamento : "Sem registro"}`;
   }
 
   static async deletarEntregasEmpresa() {
-    // const webhook = "http://localhost:3001";
+    // const webhook = "http://localhost:3000";
     const webhook = "https://webhooks-sos.up.railway.app";
 
     await fetch(`${webhook}/webhook`, {
