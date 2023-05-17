@@ -9,7 +9,7 @@ const socketIO = require("socket.io");
 const qrcode = require("qrcode");
 const http = require("http");
 const { phoneNumberFormatter } = require("./helpers/formatter");
-const port = process.env.PORT || 7000;
+const port = process.env.PORT || 7002;
 const { Requests } = require("./src/request.js");
 
 const {
@@ -20,12 +20,14 @@ const {
   buscardadosdecadastradodaempresa,
   deletarentregas,
   deletarcliente,
-  // ativarchatbot
+  ativarchatbot,
+  cronJob,
+  listarQuantidadeDeEntregasDaEmpresa,
 } = require("./src/middlewares.js");
 const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
 const { clientecadastro } = require("./src/clientecadastro.js");
 const { empresa } = require("./src/empresa.js");
-// const { fisica } = require("./src/fisica.js");
+const { fisica } = require("./src/fisica.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -75,40 +77,71 @@ const client = new Client({
   authStrategy: new LocalAuth(),
 });
 
-client.on("message", (msg) => {
-  global(msg);
+cronJob();
+client.on("message", async (msg) => {
+  let msgNumber = await checkingNumbers(msg);
+  let etapaRetrieve = await Requests.retrieveEtapa(msg);
+  let codigotelefone = codigoetelefone(msg.from, msgNumber);
+  let buscarseexistetelefonenobanco = await Requests.buscartelefonenobanco(
+    msg.from
+  );
 
-  async function global(msg) {
-    let msgNumber = await checkingNumbers(msg, client);
-    let etapaRetrieve = await Requests.retrieveEtapa(msg);
-    let codigotelefone = codigoetelefone(msg.from, msgNumber);
-    // let buscarseexistetelefonenobanco = await Requests.buscartelefonenobanco(
-    //   msg.from
-    // );
-    // console.log(buscarseexistetelefonenobanco);
-    // ---------------------Funções----------------------------Funções------------------------------------
+  // ---------------------Funções----------------------------Funções------------------------------------
+  const date = new Date();
+  const h = date.getHours();
 
-    if (etapaRetrieve !== undefined) {
-      // if (buscarseexistetelefonenobanco) {
-      sosregistrarcodigo(msg, etapaRetrieve, client);
-      clientecadastro(msgNumber, msg, etapaRetrieve, client);
-      empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
-      // }
-      // fisica(msg, etapaRetrieve, client, buscarseexistetelefonenobanco);
+  if (etapaRetrieve !== undefined) {
+    sosregistrarcodigo(msg, etapaRetrieve, client);
+    clientecadastro(msgNumber, msg, etapaRetrieve, client);
+    let listDelivery = msg.body.includes("entregas/");
+    if (buscarseexistetelefonenobanco && !listDelivery) {
+      if (h >= 10 && h < 23) {
+        empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
+      } else if (h < 10) {
+        client.sendMessage(
+          msg.from,
+          `Olá! Obrigado por entrar em contato conosco. Gostaríamos de informar que nosso atendimento começa a partir das 10h. Se você tiver alguma dúvida ou precisar de assistência, por favor, entre em contato conosco novamente após esse horário. Teremos o prazer de ajudá-lo. Obrigado pela compreensão!`
+        );
+      } else if (h > 10 && h >= 23) {
+        client.sendMessage(
+          msg.from,
+          `Pedimos desculpas pelo inconveniente, mas gostaríamos de informar que nosso horário de atendimento foi encerrado às 11h. Caso você precise de assistência, recomendamos que entre em contato conosco novamente amanhã a partir das 10h, quando retomaremos nossas atividades. Agradecemos pela compreensão.`
+        );
+      }
+    } else if (!buscarseexistetelefonenobanco && !listDelivery) {
+      if (h >= 10 && h < 23) {
+        let registrarCode = msg.body.includes("/registrar/.");
+        let registrar = msg.body.includes("/registrar");
+        if (!registrarCode && !registrar) {
+          fisica(msg, etapaRetrieve, client, buscarseexistetelefonenobanco);
+        }
+      } else if (h < 10) {
+        client.sendMessage(
+          msg.from,
+          `Olá! Obrigado por entrar em contato conosco. Gostaríamos de informar que nosso atendimento começa a partir das 10h. Se você tiver alguma dúvida ou precisar de assistência, por favor, entre em contato conosco novamente após esse horário. Teremos o prazer de ajudá-lo. Obrigado pela compreensão!`
+        );
+      } else if (h > 10 && h >= 23) {
+        client.sendMessage(
+          msg.from,
+          `Pedimos desculpas pelo inconveniente, mas gostaríamos de informar que nosso horário de atendimento foi encerrado às 11h. Caso você precise de assistência, recomendamos que entre em contato conosco novamente amanhã a partir das 10h, quando retomaremos nossas atividades. Agradecemos pela compreensão.`
+        );
+      }
     }
-
-    listarentregasequantidade(msg, client);
-
-    listartodosclientescadastrados(msg, client);
-
-    buscardadosdecadastradodaempresa(msg, client, msgNumber);
-
-    deletarentregas(msg, client);
-
-    deletarcliente(msg, client);
-
-    // ativarchatbot(msg, client);
   }
+
+  listarentregasequantidade(msg, client);
+
+  listartodosclientescadastrados(msg, client);
+
+  buscardadosdecadastradodaempresa(msg, client, msgNumber);
+
+  deletarentregas(msg, client);
+
+  deletarcliente(msg, client);
+
+  ativarchatbot(msg, client);
+
+  listarQuantidadeDeEntregasDaEmpresa(codigotelefone, msg, client);
 });
 
 // ------------------AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa----------------------------------------

@@ -76,6 +76,17 @@ Pagamento: ${dados.formadepagamento ? dados.formadepagamento : "Sem registro"}`;
     return response.data.length;
   }
 
+  static async listarQuantidadeDeEntregasDeUmaEmpresa(codigo) {
+    let response = await api.get(`/entregas/company/${codigo}`);
+
+    return response.data;
+  }
+
+  static async requestCronJob(hora) {
+    let response = await api.get(`/entregas`);
+    return response.data;
+  }
+
   static async deletarEntregasEmpresa() {
     // const webhook = "http://localhost:3001";
     const webhook = "https://webhooks-sos.up.railway.app";
@@ -93,11 +104,11 @@ Pagamento: ${dados.formadepagamento ? dados.formadepagamento : "Sem registro"}`;
     await api.delete("/entregas");
   }
 
-  // static async buscartelefonenobanco(telefone) {
-  //   const response = await api.get(`/fisica/${telefone}`);
+  static async buscartelefonenobanco(telefone) {
+    const response = await api.get(`/fisica/${telefone}`);
 
-  //   return response.data;
-  // }
+    return response.data;
+  }
 }
 
 module.exports = { Requests };

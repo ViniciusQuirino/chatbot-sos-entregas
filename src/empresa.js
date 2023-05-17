@@ -7,6 +7,7 @@ const { voltar } = require("./middlewares.js");
 
 async function empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client) {
   let message = msg.body.toLowerCase();
+ 
   if (!codigotelefone && !msgNumber && etapaRetrieve.etapa === "a") {
     client.sendMessage(msg.from, `Digite o código corretamente`);
   }
@@ -22,7 +23,7 @@ Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa e cida
         
 Exemplo: rua major pompeu 000 barra bonita
         
-Exemplo 2: rua antonio manfio 00 igaraçu do tiete`
+Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
     );
     Requests.updateEtapa(msg.from, { etapa: "b" });
     Requests.createEntregaEmpresa({
@@ -47,7 +48,7 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tiete`
   
 1 - Cartão
 2 - Dinheiro
-3 - Pago`
+3 - Pago, Pix, Pagamento online`
       );
       Requests.updateEtapa(msg.from, { etapa: "c" });
     } else if (!address && message !== "voltar") {
@@ -104,7 +105,7 @@ Por favor, escolha uma das opções ⬇️
 
 1 - Cartão
 2 - Dinheiro
-3 - Pago`
+3 - Pago, Pix, Pagamento online`
       );
     }
   }
@@ -171,13 +172,13 @@ Por favor, escolha uma das opções ⬇️
           msg.from,
           `Obrigado, seu pedido foi feito com sucesso! 😁
       
-    Assim que um de nossos entregadores aceitar seu pedido você será notificado.
-    
-    Lembrando que coletas são de 0 a 15 minutos em dias normais.
-    
-    Numero do pedido: ${response.id}
-    Endereço de entrega: ${response.entrega}
-    Observação: ${response.obs}`
+Assim que um de nossos entregadores aceitar seu pedido você será notificado.
+
+Lembrando que coletas são de 0 a 15 minutos em dias normais.
+
+Numero do pedido: ${response.id}
+Endereço de entrega: ${response.entrega}
+Observação: ${response.obs}`
         );
 
         Requests.updateEtapa(msg.from, { etapa: "a" });

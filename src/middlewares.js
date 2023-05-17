@@ -1,4 +1,5 @@
 const { Requests } = require("./request.js");
+const CronJob = require("cron").CronJob;
 
 // ---------------------------Verificar código e numero de telefone------------------------
 function codigoetelefone(from, msgNumber) {
@@ -20,10 +21,11 @@ function codigoetelefone(from, msgNumber) {
 
 //----------------------------VERIFICAR SE A CONVERSA COMEÇA COM NUMEROS------------------------------------------
 
-async function checkingNumbers(msg, client) {
-  const cg = msg.body.substring(0, 3);
+async function checkingNumbers(msg) {
+  const message = msg.body.toLowerCase();
 
-  const message = cg.toLowerCase();
+  const cg = message.substring(0, 3);
+
   const zero = message.includes("0");
   const one = message.includes("1");
   const two = message.includes("2");
@@ -47,7 +49,18 @@ async function checkingNumbers(msg, client) {
     eight ||
     nine
   ) {
-    const checkingCompanies = await Requests.retrieveClient(cg);
+    let listDelivery = message.includes("entregas/");
+    if (!listDelivery) {
+      const checkingCompanies = await Requests.retrieveClient(cg);
+
+      if (checkingCompanies === null) {
+        return false;
+      } else {
+        return checkingCompanies;
+      }
+    }
+    let final = message.slice(message.length - 3);
+    const checkingCompanies = await Requests.retrieveClient(final);
 
     if (checkingCompanies === null) {
       return false;
@@ -55,7 +68,6 @@ async function checkingNumbers(msg, client) {
       return checkingCompanies;
     }
   }
-
   return true;
 }
 
@@ -68,6 +80,7 @@ function checkingAddress(msg) {
   const igaracuthree = message.includes("igaraçu do tietê");
   const igaracufour = message.includes("igaracu do tietê");
   const barra = message.includes("barra bonita");
+  const barratwo = message.includes("barra bomita");
   const zero = message.includes("0");
   const one = message.includes("1");
   const two = message.includes("2");
@@ -78,13 +91,16 @@ function checkingAddress(msg) {
   const seven = message.includes("7");
   const eight = message.includes("8");
   const nine = message.includes("9");
-  const rua = message.includes("rua");
-  const av = message.includes("av");
-  const avn = message.includes("avn");
-  const avenida = message.includes("avenida");
 
-  if (message.length > 27) {
-    if (igaracuone || igaracutwo || igaracuthree || igaracufour || barra) {
+  if (message.length > 20) {
+    if (
+      igaracuone ||
+      igaracutwo ||
+      igaracuthree ||
+      igaracufour ||
+      barra ||
+      barratwo
+    ) {
       if (
         zero ||
         one ||
@@ -95,11 +111,7 @@ function checkingAddress(msg) {
         six ||
         seven ||
         eight ||
-        nine ||
-        rua ||
-        av ||
-        avn ||
-        avenida
+        nine
       ) {
         return true;
       }
@@ -219,7 +231,7 @@ async function ativarchatbot(msg, client) {
   let telefone = message.slice(7, message.length);
 
   if (ativar) {
-    if (msg.from == "5514996056869@c.us")
+    if (msg.from == "5514998536591@c.us")
       Requests.updateEtapa(`55${telefone}@c.us`, { ativado: true, etapa: "a" });
 
     client.sendMessage(msg.from, "Chatbot ativado.");
@@ -303,10 +315,158 @@ Se possivel colocar numero de telefone do cliente, assim não precisamos entrar 
   );
 }
 
+function temalgumaobservacaofisica(from, client) {
+  client.sendMessage(
+    from,
+    `Tem alguma observação para facilitar para nosso motoboy ?
+
+Escreva oque quiser, nosso motoboy irá ver sua observação
+
+Por favor, coloque o máximo de informação possivel.
+
+Ex: telefone do cliente caso o motoqueiro não encontre a casa.`
+  );
+}
+
 function voltar(from, body, client) {
   if (body === "voltar") {
     Requests.updateEtapa(from, { etapa: "a" });
     client.sendMessage(from, `Você voltou para o inicío. Comece novamente!`);
+  }
+}
+
+function digiteoenderecodecoleta(from, client) {
+  client.sendMessage(
+    from,
+    `Digite o endereço de COLETA por favor.
+
+Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa, cidade.
+
+Exemplo: rua quatorze de dezembro 449 barra bonita
+
+Exemplo 2: rua florindo dias silva 37 igaraçu do tietê`
+  );
+}
+
+async function obrigadoseupedidofoifeitocomsucesso(from, client, response) {
+  const data = {
+    id: response.id,
+    status: "open",
+    paymentMethod: response.formadepagamento,
+    notes: response.obs,
+    deliveryPoint: {
+      address: response.entrega,
+    },
+  };
+
+  const responseFood = await fetch(
+    "https://app.foodydelivery.com/rest/1.2/orders",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "326b3f2b4c9f4bcdb48363c0d023260c",
+      },
+      body: JSON.stringify(data),
+    }
+  )
+    .then((res) => res.json())
+    .then((res) => res)
+    .catch((err) => console.log(err));
+
+  if (responseFood.errorCode) {
+    console.log(responseFood);
+    client.sendMessage(
+      from,
+      "Por algum motivo ouve uma falha no lançamento da entrega, tente novamente começando do início ⚠️"
+    );
+    Requests.updateEtapa(from, { etapa: "a" });
+  } else {
+    const dados = {
+      telefone: from,
+      iddatabase: response.id,
+      entrega: response.entrega,
+      entregaidfood: responseFood.uid,
+    };
+
+    fetch("http://localhost:3000/webhook/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dados),
+    })
+      .then((res) => res.json())
+      .then((res) => res)
+      .catch((err) => console.log(err));
+
+    const splitArray = response.obs.split("-");
+
+    client.sendMessage(
+      from,
+      `Obrigado, seu pedido foi feito com sucesso! 😁
+        
+Assim que um de nossos entregadores aceitar seu pedido você será notificado.
+
+Lembrando que coletas são de 0 a 15 minutos em dias normais.
+
+Numero do pedido: ${response.id}
+Lugares: ${splitArray[0]}
+Endereço de coleta: ${splitArray[1]}
+Endereço de entrega: ${response.entrega}
+Observação: ${splitArray[2]} - ${splitArray[3]}
+Forma de pagamento: ${response.formadepagamento == "pix" ? "Pix" : "Dinheiro"}`
+    );
+
+    Requests.updateEtapa(from, { etapa: "a" });
+  }
+}
+
+function cronJob() {
+  const job = new CronJob("* * * * *", async () => {
+    Requests.requestCronJob();
+  });
+  job.start();
+}
+
+async function listarQuantidadeDeEntregasDaEmpresa(
+  codigotelefone,
+  msg,
+  client
+) {
+  let message = msg.body.toLowerCase();
+  let listDelivery = message.includes("entregas/");
+
+  if (codigotelefone && listDelivery) {
+    let final = message.slice(message.length - 3);
+    const result = await Requests.listarQuantidadeDeEntregasDeUmaEmpresa(final);
+
+    let texto = "";
+    for (let dados of result) {
+      const pagamento = getClass(dados.formadepagamento);
+      function getClass(status) {
+        const map = {
+          money: "dinheiro",
+          pix: "pago",
+          card: "cartão",
+        };
+
+        return map[status];
+      }
+
+      texto += `
+----------------------
+Numero do pedido: ${dados.id}
+Telefone: ${dados.telefone.slice(2, 13)}
+Endereço: ${dados.entrega}
+Forma de pagamento: ${pagamento}
+Obs: ${dados.obs}`;
+    }
+    client.sendMessage(msg.from, texto);
+    client.sendMessage(
+      msg.from,
+      `Quantidade de entregas hoje: ${result.length}`
+    );
   }
 }
 
@@ -327,4 +487,9 @@ module.exports = {
   deletarentregas,
   deletarcliente,
   ativarchatbot,
+  digiteoenderecodecoleta,
+  temalgumaobservacaofisica,
+  obrigadoseupedidofoifeitocomsucesso,
+  cronJob,
+  listarQuantidadeDeEntregasDaEmpresa,
 };
