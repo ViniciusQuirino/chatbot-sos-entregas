@@ -9,17 +9,26 @@ async function empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client) {
   let message = msg.body.toLowerCase();
   let desativar = message.slice(0, 9);
   let ativar = message.slice(0, 6);
+  let entregas = message.slice(0, 8);
   if (
     !codigotelefone &&
     !msgNumber &&
     etapaRetrieve.etapa === "a" &&
     ativar != "ativar" &&
-    desativar != "desativar"
+    desativar != "desativar" &&
+    entregas != "entregas"
   ) {
     client.sendMessage(msg.from, `Digite o código corretamente`);
   }
   const a = msg.body.charAt(3);
-  if (codigotelefone && etapaRetrieve.etapa === "a" && a !== "/") {
+  if (
+    codigotelefone &&
+    etapaRetrieve.etapa === "a" &&
+    a !== "/" &&
+    ativar != "ativar" &&
+    desativar != "desativar" &&
+    entregas != "entregas"
+  ) {
     client.sendMessage(
       msg.from,
       `Olá ${msgNumber.nome}, bora fazer mais um pedido de entrega ?!😁

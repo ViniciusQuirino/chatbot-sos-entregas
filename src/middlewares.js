@@ -471,7 +471,7 @@ Forma de pagamento: ${response.formadepagamento == "pix" ? "Pix" : "Dinheiro"}`
     if (body == "1") {
       client.sendMessage(
         from,
-        `Assim que terminal de fazer o pix, nos envie o comprovante. 😃`
+        `Assim que terminar de fazer o pix, nos envie o comprovante. 😃`
       );
 
       client.sendMessage(
