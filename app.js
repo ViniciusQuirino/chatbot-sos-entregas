@@ -106,7 +106,7 @@ Gostaríamos de informar que nosso atendimento começa a partir das 🕥 10h30.
 Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
 
 Obrigado pela compreensão!`
-        );
+        )
       } else if (h > 10 && h >= 23) {
         client.sendMessage(
           msg.from,
