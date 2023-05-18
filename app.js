@@ -95,7 +95,8 @@ client.on("message", async (msg) => {
   if (etapaRetrieve !== undefined) {
     sosregistrarcodigo(msg, etapaRetrieve, client);
     clientecadastro(msgNumber, msg, etapaRetrieve, client);
-    let listDelivery = msg.body.includes("entregas/");
+    const message = msg.body.toLowerCase();
+    let listDelivery = message.includes("entregas/");
     if (buscarseexistetelefonenobanco && !listDelivery) {
       if (h >= 10 && h < 23) {
         empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
