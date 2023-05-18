@@ -385,7 +385,7 @@ Rua major pompeu 000 barra bonita`
 
       // CRIS
       client.sendMessage(
-        "5514998536591@c.us",
+        "5514991342480@c.us",
         `Você deseja mesmo assim finalizar o pedido de entrega ?
   
 Escolha por favor uma das opções
@@ -394,7 +394,7 @@ Escolha por favor uma das opções
 2 - Não.`
       );
       client.sendMessage(
-        "5514998536591@c.us",
+        "5514991342480@c.us",
         `Atenção! Temos um cliente aguardando para consultar o valor da entrega.`
       );
 

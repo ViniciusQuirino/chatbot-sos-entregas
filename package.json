@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Whatsapp api by Ngekoding",
   "main": "app.js",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "build": "browserify app.js -o bundle.js",
     "start": "node app.js",

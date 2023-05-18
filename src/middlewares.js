@@ -231,10 +231,11 @@ async function ativarchatbot(msg, client) {
   let telefone = message.slice(7, message.length);
 
   if (ativar) {
-    if (msg.from == "5514996977366@c.us" || msg.from == "5514991342480@c.us")
+    if (msg.from == "5514996977366@c.us" || msg.from == "5514991342480@c.us") {
       Requests.updateEtapa(`55${telefone}@c.us`, { ativado: true, etapa: "a" });
 
-    client.sendMessage(msg.from, "Chatbot ativado.");
+      client.sendMessage(msg.from, "Chatbot ativado.");
+    }
   }
 }
 
@@ -389,7 +390,7 @@ async function obrigadoseupedidofoifeitocomsucesso(from, client, response) {
       entregaidfood: responseFood.uid,
     };
 
-    fetch("http://localhost:3000/webhook/create", {
+    fetch("https://database-sos.up.railway.app/webhook/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
