@@ -302,7 +302,6 @@ Ex de resposta:
       Requests.updateClient(etapaRetrieve.codigo, {
         telefonecinco: "55" + msg.body + "@c.us",
       });
-      // Requests.updateEtapa(msg.from, { etapa: "105" });
 
       desejacadastrarmaisnumeros(client, msg.from);
     } else if (msg.body.length > 11) {

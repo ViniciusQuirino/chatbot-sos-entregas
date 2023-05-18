@@ -227,14 +227,56 @@ Telefone 5: ${
 
 async function ativarchatbot(msg, client) {
   let message = msg.body.toLowerCase();
-  let ativar = message.includes("ativar");
-  let telefone = message.slice(7, message.length);
 
-  if (ativar) {
-    if (msg.from == "5514996977366@c.us" || msg.from == "5514991342480@c.us") {
-      Requests.updateEtapa(`55${telefone}@c.us`, { ativado: true, etapa: "a" });
+  let ativar = message.slice(0, 6);
+  let telefone = message.split("/");
 
-      client.sendMessage(msg.from, "Chatbot ativado.");
+  if (ativar == "ativar") {
+    if (
+      msg.from == "5514996977366@c.us" ||
+      msg.from == "5514991342480@c.us" ||
+      msg.from == "5514998536591@c.us"
+    ) {
+      try {
+        await Requests.updateEtapa(`55${telefone[1]}@c.us`, {
+          ativado: true,
+          etapa: "a",
+        });
+        client.sendMessage(msg.from, "Chatbot ativado.");
+      } catch (error) {
+        client.sendMessage(
+          msg.from,
+          "Não existe esse numero no banco de dados. Não se esqueça do ddd."
+        );
+      }
+    }
+  }
+}
+
+async function desativarchatbot(msg, client) {
+  let message = msg.body.toLowerCase();
+
+  let desativar = message.slice(0, 9);
+  let telefone = message.split("/");
+
+  if (desativar == "desativar") {
+    if (
+      msg.from == "5514996977366@c.us" ||
+      msg.from == "5514991342480@c.us" ||
+      msg.from == "5514998536591@c.us"
+    ) {
+      try {
+        await Requests.updateEtapa(`55${telefone[1]}@c.us`, {
+          ativado: false,
+          etapa: "des",
+        });
+        client.sendMessage(msg.from, "Chatbot desativado.");
+      } catch (error) {
+        client.sendMessage(
+          msg.from,
+          "Não existe esse numero no banco de dados. Não se esqueça do ddd."
+        );
+      }
     }
   }
 }
@@ -349,7 +391,12 @@ Exemplo 2: rua florindo dias silva 37 igaraçu do tietê`
   );
 }
 
-async function obrigadoseupedidofoifeitocomsucesso(from, client, response) {
+async function obrigadoseupedidofoifeitocomsucesso(
+  body,
+  from,
+  client,
+  response
+) {
   const data = {
     id: response.id,
     status: "open",
@@ -366,7 +413,7 @@ async function obrigadoseupedidofoifeitocomsucesso(from, client, response) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "a39577713122403da50f7e0a7656db39",
+        Authorization: "326b3f2b4c9f4bcdb48363c0d023260c",
       },
       body: JSON.stringify(data),
     }
@@ -406,7 +453,7 @@ async function obrigadoseupedidofoifeitocomsucesso(from, client, response) {
     client.sendMessage(
       from,
       `Obrigado, seu pedido foi feito com sucesso! 😁
-        
+            
 Assim que um de nossos entregadores aceitar seu pedido você será notificado.
 
 Lembrando que coletas são de 0 a 15 minutos em dias normais.
@@ -414,13 +461,34 @@ Lembrando que coletas são de 0 a 15 minutos em dias normais.
 Numero do pedido: ${response.id}
 Lugares: ${splitArray[0]}
 
-Endereço de coleta: ${splitArray[1]} - sp
-Endereço de entrega: ${response.entrega} - sp
+Endereço de coleta: ${splitArray[1]}
+Endereço de entrega: ${response.entrega}
 
 Observação: ${splitArray[2]} - ${splitArray[3]}
 Forma de pagamento: ${response.formadepagamento == "pix" ? "Pix" : "Dinheiro"}`
     );
 
+    if (body == "1") {
+      client.sendMessage(
+        from,
+        `Assim que terminal de fazer o pix, nos envie o comprovante. 😃`
+      );
+
+      client.sendMessage(
+        from,
+        `CNPJ
+SOS Entregas
+
+Banco Cora`
+      );
+
+      client.sendMessage(from, `32418164000120`);
+
+      Requests.updateEtapa(from, { etapa: "compr" });
+    }
+  }
+
+  if (body == "2") {
     Requests.updateEtapa(from, { etapa: "a" });
   }
 }
@@ -490,6 +558,7 @@ module.exports = {
   deletarentregas,
   deletarcliente,
   ativarchatbot,
+  desativarchatbot,
   digiteoenderecodecoleta,
   temalgumaobservacaofisica,
   obrigadoseupedidofoifeitocomsucesso,

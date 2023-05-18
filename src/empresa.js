@@ -7,8 +7,15 @@ const { voltar } = require("./middlewares.js");
 
 async function empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client) {
   let message = msg.body.toLowerCase();
-
-  if (!codigotelefone && !msgNumber && etapaRetrieve.etapa === "a") {
+  let desativar = message.slice(0, 9);
+  let ativar = message.slice(0, 6);
+  if (
+    !codigotelefone &&
+    !msgNumber &&
+    etapaRetrieve.etapa === "a" &&
+    ativar != "ativar" &&
+    desativar != "desativar"
+  ) {
     client.sendMessage(msg.from, `Digite o código corretamente`);
   }
   const a = msg.body.charAt(3);
@@ -40,7 +47,7 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
     if (address) {
       Requests.updateEntregaEmpresa({
         telefone: msg.from,
-        entrega: msg.body + " sp",
+        entrega: msg.body,
       });
       client.sendMessage(
         msg.from,
