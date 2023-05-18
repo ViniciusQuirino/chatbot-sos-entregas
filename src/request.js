@@ -89,7 +89,7 @@ Pagamento: ${dados.formadepagamento ? dados.formadepagamento : "Sem registro"}`;
 
   static async deletarEntregasEmpresa() {
     // const webhook = "http://localhost:3000";
-    const webhook = "https://webhooks-sos.up.railway.app";
+    const webhook = "https://database-sos.cyclic.app/webhook";
 
     await fetch(`${webhook}/webhook`, {
       method: "DELETE",

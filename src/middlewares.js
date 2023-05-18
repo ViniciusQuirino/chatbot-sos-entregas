@@ -366,7 +366,7 @@ async function obrigadoseupedidofoifeitocomsucesso(from, client, response) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "326b3f2b4c9f4bcdb48363c0d023260c",
+        Authorization: "a39577713122403da50f7e0a7656db39",
       },
       body: JSON.stringify(data),
     }
@@ -390,7 +390,7 @@ async function obrigadoseupedidofoifeitocomsucesso(from, client, response) {
       entregaidfood: responseFood.uid,
     };
 
-    fetch("https://database-sos.up.railway.app/webhook/create", {
+    fetch("https://database-sos.cyclic.app/webhook/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -413,8 +413,10 @@ Lembrando que coletas são de 0 a 15 minutos em dias normais.
 
 Numero do pedido: ${response.id}
 Lugares: ${splitArray[0]}
-Endereço de coleta: ${splitArray[1]}
-Endereço de entrega: ${response.entrega}
+
+Endereço de coleta: ${splitArray[1]} - sp
+Endereço de entrega: ${response.entrega} - sp
+
 Observação: ${splitArray[2]} - ${splitArray[3]}
 Forma de pagamento: ${response.formadepagamento == "pix" ? "Pix" : "Dinheiro"}`
     );
