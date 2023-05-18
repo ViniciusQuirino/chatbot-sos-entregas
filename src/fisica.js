@@ -71,7 +71,7 @@ O chatbot foi desativado temporariamente. Por favor, não se esqueça de reativ�
 O chatbot foi desativado temporariamente. Por favor, não se esqueça de reativá-lo após o término da conversa, para que o cliente possa continuar a receber assistência automatizada.`
       );
 
-      Requests.updateEtapa(msg.from, { ativado: false, etapa: "ç" });
+      Requests.updateEtapa(msg.from, { ativado: false, etapa: "des" });
     } else if (msg.body != "1" && msg.body != "2" && message !== "voltar") {
       client.sendMessage(
         msg.from,
@@ -94,6 +94,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       Requests.createEntregaEmpresa({
         telefone: msg.from,
         obs: "Barra x Barra 8,00",
+        codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
     }
@@ -102,6 +103,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       Requests.createEntregaEmpresa({
         telefone: msg.from,
         obs: "Barra x Igaraçu 9,00",
+        codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
     }
@@ -110,6 +112,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       Requests.createEntregaEmpresa({
         telefone: msg.from,
         obs: "Cohab da Barra pra cima x Igaraçu 12,00",
+        codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
     }
@@ -118,6 +121,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       Requests.createEntregaEmpresa({
         telefone: msg.from,
         obs: "Igaraçu x Igaraçu 7,00",
+        codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
     }
@@ -126,6 +130,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       Requests.createEntregaEmpresa({
         telefone: msg.from,
         obs: "Igaraçu x Barra 9,00",
+        codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
     }
@@ -134,6 +139,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       Requests.createEntregaEmpresa({
         telefone: msg.from,
         obs: "Igaraçu x Cohab da Barra pra cima 12,00",
+        codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
     }
@@ -143,6 +149,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       Requests.createEntregaEmpresa({
         telefone: msg.from,
         obs: "Áreas Rurais, chácaras e condomínio",
+        codigo: "300",
       });
     } else if (
       msg.body != "1" &&
@@ -192,7 +199,7 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
 
       Requests.updateEntregaEmpresa({
         telefone: msg.from,
-        obs: msg.body,
+        obs: msg.body + " sp",
         b: "b",
       });
       Requests.updateEtapa(msg.from, { etapa: "e" });
@@ -223,7 +230,7 @@ Rua major pompeu 000 barra bonita`
 
       Requests.updateEntregaEmpresa({
         telefone: msg.from,
-        entrega: msg.body,
+        entrega: msg.body + " sp",
       });
       Requests.updateEtapa(msg.from, { etapa: "f" });
     } else if (!address && message !== "voltar") {
@@ -314,14 +321,14 @@ Vamos tentar novamente. Sobre o pagamento, por favor, escolha uma das opções �
         telefone: msg.from,
         formadepagamento: "pix",
       });
-      obrigadoseupedidofoifeitocomsucesso(msg.from, client, response);
+      obrigadoseupedidofoifeitocomsucesso(msg.body, msg.from, client, response);
     } else if (dois) {
       const response = await Requests.updateEntregaEmpresa({
         telefone: msg.from,
         formadepagamento: "money",
       });
 
-      obrigadoseupedidofoifeitocomsucesso(msg.from, client, response);
+      obrigadoseupedidofoifeitocomsucesso(msg.body, msg.from, client, response);
     } else if (!um && !dois && message !== "voltar") {
       client.sendMessage(
         msg.from,
@@ -355,7 +362,7 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
 
       Requests.updateEntregaEmpresa({
         telefone: msg.from,
-        obs: msg.body,
+        obs: msg.body + " sp",
         b: "b",
       });
       Requests.updateEtapa(msg.from, { etapa: "41" });
@@ -378,7 +385,7 @@ Rua major pompeu 000 barra bonita`
       Requests.updateEtapa(msg.from, { etapa: "42" });
       Requests.updateEntregaEmpresa({
         telefone: msg.from,
-        entrega: msg.body,
+        entrega: msg.body + " sp",
       });
       client.sendMessage(
         msg.from,
@@ -388,7 +395,7 @@ Rua major pompeu 000 barra bonita`
       // CRIS
       client.sendMessage(
         "5514991342480@c.us",
-        `Você deseja mesmo assim finalizar o pedido de entrega ?
+        `Você deseja finalizar o pedido de entrega ?
   
 Escolha por favor uma das opções
 
@@ -403,7 +410,7 @@ Escolha por favor uma das opções
       // VIERA
       client.sendMessage(
         "5514996977366@c.us",
-        `Você deseja mesmo assim finalizar o pedido de entrega ?
+        `Você deseja finalizar o pedido de entrega ?
   
 Escolha por favor uma das opções
 
@@ -447,6 +454,10 @@ Rua major pompeu 000 barra bonita`
 Até a próxima! Tenha um ótimo dia!`
       );
       Requests.updateEtapa(msg.from, { etapa: "a" });
+      Requests.updateEntregaEmpresa({
+        telefone: msg.from,
+        msgwhats: true,
+      });
     }
 
     if (msg.body != "1" && msg.body != "2" && message !== "voltar") {
@@ -462,6 +473,18 @@ Por favor, escolha uma das opções ⬇️
 2 - Não.`
       );
     }
+  }
+  // ---------------COMPROVANTE---------------
+  if (etapaRetrieve.etapa == "compr" && msg.mediaKey != undefined) {
+    client.sendMessage(
+      msg.from,
+      `Obrigado por nos enviar o comprovante!
+      
+Agradecemos pela sua colaboração e confiança em nossos serviços.
+
+Ficamos satisfeitos em poder atendê-lo(a) e tornar essa entrega possível. 😃`
+    );
+    Requests.updateEtapa(msg.from, { etapa: "a" });
   }
 }
 

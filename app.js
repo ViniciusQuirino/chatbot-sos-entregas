@@ -9,7 +9,7 @@ const socketIO = require("socket.io");
 const qrcode = require("qrcode");
 const http = require("http");
 const { phoneNumberFormatter } = require("./helpers/formatter");
-const port = process.env.PORT || 7002;
+const port = process.env.PORT || 7000;
 const { Requests } = require("./src/request.js");
 
 const {
@@ -21,6 +21,7 @@ const {
   deletarentregas,
   deletarcliente,
   ativarchatbot,
+  desativarchatbot,
   cronJob,
   listarQuantidadeDeEntregasDaEmpresa,
 } = require("./src/middlewares.js");
@@ -79,6 +80,7 @@ const client = new Client({
 
 cronJob();
 client.on("message", async (msg) => {
+  // console.log(msg)
   let msgNumber = await checkingNumbers(msg);
   let etapaRetrieve = await Requests.retrieveEtapa(msg);
   let codigotelefone = codigoetelefone(msg.from, msgNumber);
@@ -106,7 +108,7 @@ Gostaríamos de informar que nosso atendimento começa a partir das 🕥 10h30.
 Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
 
 Obrigado pela compreensão!`
-        )
+        );
       } else if (h > 10 && h >= 23) {
         client.sendMessage(
           msg.from,
@@ -159,6 +161,8 @@ Agradecemos pela compreensão.`
   deletarcliente(msg, client);
 
   ativarchatbot(msg, client);
+
+  desativarchatbot(msg, client);
 
   listarQuantidadeDeEntregasDaEmpresa(codigotelefone, msg, client);
 });

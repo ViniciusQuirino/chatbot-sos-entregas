@@ -46,9 +46,9 @@ class Requests {
   }
 
   static async updateEtapa(from, body) {
-    await api.patch(`/etapas/${from}`, body);
+    const response = await api.patch(`/etapas/${from}`, body);
 
-    return true;
+    return response.data;
   }
 
   static async createEntregaEmpresa(data) {
@@ -88,10 +88,7 @@ Pagamento: ${dados.formadepagamento ? dados.formadepagamento : "Sem registro"}`;
   }
 
   static async deletarEntregasEmpresa() {
-    // const webhook = "http://localhost:3000";
-    const webhook = "https://database-sos.cyclic.app/webhook";
-
-    await fetch(`${webhook}/webhook`, {
+    await fetch("https://database-sos.cyclic.app/webhook", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
