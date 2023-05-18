@@ -101,15 +101,18 @@ client.on("message", async (msg) => {
         client.sendMessage(
           msg.from,
           `Olá! 😃
-          
-Gostaríamos de informar que nosso atendimento começa a partir das 🕥 10h30. Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
+Gostaríamos de informar que nosso atendimento começa a partir das 🕥 10h30. 
+
+Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
 
 Obrigado pela compreensão!`
         );
       } else if (h > 10 && h >= 23) {
         client.sendMessage(
           msg.from,
-          `Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙. Caso você precise de assistência, chamar no grupo de whatsApp.
+          `Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
+          
+Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
 
 Agradecemos pela compreensão.`
         );
@@ -125,8 +128,9 @@ Agradecemos pela compreensão.`
         client.sendMessage(
           msg.from,
           `Olá! 😃
+Gostaríamos de informar que nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
 
-Gostaríamos de informar que nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙. Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
+Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
 
 Obrigado pela compreensão!`
         );
@@ -134,8 +138,9 @@ Obrigado pela compreensão!`
         client.sendMessage(
           msg.from,
           `Olá! 😃
+Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
 
-Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙. Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente amanhã a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
+Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente amanhã a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
 
 Agradecemos pela compreensão.`
         );
