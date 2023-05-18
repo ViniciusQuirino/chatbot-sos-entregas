@@ -16,11 +16,13 @@ async function fisica(msg, etapaRetrieve, client) {
   if (etapaRetrieve.etapa == "a") {
     client.sendMessage(
       msg.from,
-      `Olá, eu sou o assistente virtual da empresa SOS Entregas e estou aqui para te ajudar. Oque você deseja nesse momento ?
+      `Olá! 😃
+Eu sou o Assistente Virtual da SOS Entregas e estou aqui para te ajudar. Oque você deseja nesse momento ?
 
 Digite apenas o numero da opção.
+⬇️
 
-1 - Preciso fazer uma entrega e consultar os valores.
+1 - Preciso fazer uma entrega ou consultar valores.
 2 - Falar com um representante.`
     );
     Requests.updateEtapa(msg.from, { etapa: "b" });

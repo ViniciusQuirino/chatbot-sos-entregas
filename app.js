@@ -100,12 +100,18 @@ client.on("message", async (msg) => {
       } else if (h < 10) {
         client.sendMessage(
           msg.from,
-          `Olá! Obrigado por entrar em contato conosco. Gostaríamos de informar que nosso atendimento começa a partir das 10h. Se você tiver alguma dúvida ou precisar de assistência, por favor, entre em contato conosco novamente após esse horário. Teremos o prazer de ajudá-lo. Obrigado pela compreensão!`
+          `Olá! 😃
+          
+Gostaríamos de informar que nosso atendimento começa a partir das 🕥 10h30. Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
+
+Obrigado pela compreensão!`
         );
       } else if (h > 10 && h >= 23) {
         client.sendMessage(
           msg.from,
-          `Pedimos desculpas pelo inconveniente, mas gostaríamos de informar que nosso horário de atendimento foi encerrado às 11h. Caso você precise de assistência, recomendamos que entre em contato conosco novamente amanhã a partir das 10h, quando retomaremos nossas atividades. Agradecemos pela compreensão.`
+          `Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙. Caso você precise de assistência, chamar no grupo de whatsApp.
+
+Agradecemos pela compreensão.`
         );
       }
     } else if (!buscarseexistetelefonenobanco && !listDelivery) {
@@ -118,12 +124,20 @@ client.on("message", async (msg) => {
       } else if (h < 10) {
         client.sendMessage(
           msg.from,
-          `Olá! Obrigado por entrar em contato conosco. Gostaríamos de informar que nosso atendimento começa a partir das 10h. Se você tiver alguma dúvida ou precisar de assistência, por favor, entre em contato conosco novamente após esse horário. Teremos o prazer de ajudá-lo. Obrigado pela compreensão!`
+          `Olá! 😃
+
+Gostaríamos de informar que nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙. Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
+
+Obrigado pela compreensão!`
         );
       } else if (h > 10 && h >= 23) {
         client.sendMessage(
           msg.from,
-          `Pedimos desculpas pelo inconveniente, mas gostaríamos de informar que nosso horário de atendimento foi encerrado às 11h. Caso você precise de assistência, recomendamos que entre em contato conosco novamente amanhã a partir das 10h, quando retomaremos nossas atividades. Agradecemos pela compreensão.`
+          `Olá! 😃
+
+Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙. Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente amanhã a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
+
+Agradecemos pela compreensão.`
         );
       }
     }
