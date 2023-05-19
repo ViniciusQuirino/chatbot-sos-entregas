@@ -96,8 +96,15 @@ client.on("message", async (msg) => {
     sosregistrarcodigo(msg, etapaRetrieve, client);
     clientecadastro(msgNumber, msg, etapaRetrieve, client);
     const message = msg.body.toLowerCase();
+    let desativar = message.slice(0, 9);
+    let ativar = message.slice(0, 6);
     let listDelivery = message.includes("entregas/");
-    if (buscarseexistetelefonenobanco && !listDelivery) {
+    if (
+      buscarseexistetelefonenobanco &&
+      !listDelivery &&
+      ativar != "ativar" &&
+      desativar != "desativar"
+    ) {
       if (h >= 10 && h < 23) {
         empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
       } else if (h < 10) {
