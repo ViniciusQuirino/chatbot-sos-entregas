@@ -436,7 +436,7 @@ async function obrigadoseupedidofoifeitocomsucesso(
       entregaidfood: responseFood.uid,
     };
 
-    fetch("https://database-sos.cyclic.app/webhook/create", {
+    fetch("https://database-sos.up.railway.app/webhook/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
