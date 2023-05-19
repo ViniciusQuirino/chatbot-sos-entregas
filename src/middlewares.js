@@ -9,7 +9,7 @@ function codigoetelefone(from, msgNumber) {
       from == msgNumber.telefonedois ||
       from == msgNumber.telefonetres ||
       from == msgNumber.telefonequatro ||
-      from == msgNumber.telefonequatro
+      from == msgNumber.telefonecinco
     ) {
       return true;
     }
