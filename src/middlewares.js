@@ -18,7 +18,6 @@ function codigoetelefone(from, msgNumber) {
 
   return false;
 }
-
 //----------------------------VERIFICAR SE A CONVERSA COMEÇA COM NUMEROS------------------------------------------
 
 async function checkingNumbers(msg) {
