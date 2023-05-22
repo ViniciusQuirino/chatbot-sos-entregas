@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
     root: __dirname,
   });
 });
-
+cronJob()
 const client = new Client({
   restartOnAuthFail: true,
   puppeteer: {
