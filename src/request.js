@@ -82,7 +82,7 @@ Pagamento: ${dados.formadepagamento ? dados.formadepagamento : "Sem registro"}`;
     return response.data;
   }
 
-  static async requestCronJob(hora) {
+  static async requestCronJob() {
     let response = await api.get(`/entregas`);
     return response.data;
   }

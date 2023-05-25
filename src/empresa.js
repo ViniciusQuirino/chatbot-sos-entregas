@@ -17,13 +17,11 @@ async function empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client) {
       msg.from,
       `Olá ${msgNumber.nome}, bora fazer mais um pedido de entrega ?!😁
 
-Digite o endereço de ENTREGA por favor.
+Digite o endereço de *ENTREGA* por favor.
         
-Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa e cidade.
+Precisamos que seja nesse formato do exemplo:
         
-Exemplo: rua major pompeu 000 barra bonita
-        
-Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
     );
     Requests.updateEtapa(msg.from, { etapa: "b" });
     Requests.createEntregaEmpresa({
@@ -51,14 +49,20 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
 3 - Pago, Pix, Pagamento online`
       );
       Requests.updateEtapa(msg.from, { etapa: "c" });
-    } else if (!address && message !== "voltar") {
+    } else if (
+      !address &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
-        `Esse endereço não é valido, tente novamente!
+        `Atenção ⚠️
+Esse endereço não é valido, tente novamente!
         
-Precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Rua major pompeu 000 barra bonita`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
       );
     }
   }
@@ -94,7 +98,14 @@ Rua major pompeu 000 barra bonita`
       Requests.updateEtapa(msg.from, { etapa: "d" });
     }
 
-    if (!um && !dois && !tres && message !== "voltar") {
+    if (
+      !um &&
+      !dois &&
+      !tres &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
         `Desculpa, não consegui entender sua resposta.
@@ -112,7 +123,11 @@ Por favor, escolha uma das opções ⬇️
 
   if (etapaRetrieve.etapa === "d") {
     voltar(msg.from, message, client);
-    if (message !== "voltar") {
+    if (
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       const response = await Requests.updateEntregaEmpresa({
         telefone: msg.from,
         obs: msg.body,

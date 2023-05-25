@@ -72,7 +72,13 @@ O chatbot foi desativado temporariamente. Por favor, não se esqueça de reativ�
       );
 
       Requests.updateEtapa(msg.from, { ativado: false, etapa: "des" });
-    } else if (msg.body != "1" && msg.body != "2" && message !== "voltar") {
+    } else if (
+      msg.body != "1" &&
+      msg.body != "2" &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
         `Desculpa, não consegui entender sua resposta.
@@ -102,7 +108,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       digiteoenderecodecoleta(msg.from, client);
       Requests.createEntregaEmpresa({
         telefone: msg.from,
-        obs: "Barra x Igaraçu 9,00",
+        obs: "Barra x Igaraçu",
         codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
@@ -111,7 +117,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       digiteoenderecodecoleta(msg.from, client);
       Requests.createEntregaEmpresa({
         telefone: msg.from,
-        obs: "Cohab da Barra pra cima x Igaraçu 12,00",
+        obs: "Cohab da Barra pra cima x Igaraçu",
         codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
@@ -120,7 +126,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       digiteoenderecodecoleta(msg.from, client);
       Requests.createEntregaEmpresa({
         telefone: msg.from,
-        obs: "Igaraçu x Igaraçu 7,00",
+        obs: "Igaraçu x Igaraçu",
         codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
@@ -129,7 +135,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       digiteoenderecodecoleta(msg.from, client);
       Requests.createEntregaEmpresa({
         telefone: msg.from,
-        obs: "Igaraçu x Barra 9,00",
+        obs: "Igaraçu x Barra",
         codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
@@ -138,7 +144,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       digiteoenderecodecoleta(msg.from, client);
       Requests.createEntregaEmpresa({
         telefone: msg.from,
-        obs: "Igaraçu x Cohab da Barra pra cima 12,00",
+        obs: "Igaraçu x Cohab da Barra pra cima",
         codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
@@ -159,7 +165,9 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       msg.body != "5" &&
       msg.body != "6" &&
       msg.body != "7" &&
-      message !== "voltar"
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
     ) {
       client.sendMessage(
         msg.from,
@@ -188,13 +196,12 @@ Por favor, escolha uma das opções ⬇️
     if (address) {
       client.sendMessage(
         msg.from,
-        `Digite o endereço de ENTREGA por favor.
+        `Uhuul 😁
+Agora digite o endereço de *ENTREGA* por favor.
         
-Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa e cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Exemplo: rua major pompeu 000 barra bonita
-
-Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
       );
 
       Requests.updateEntregaEmpresa({
@@ -203,14 +210,20 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
         b: "b",
       });
       Requests.updateEtapa(msg.from, { etapa: "e" });
-    } else if (!address && message !== "voltar") {
+    } else if (
+      !address &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
-        `Esse endereço não é valido, tente novamente!
+        `Atenção ⚠️
+Esse endereço não é valido, tente novamente!
         
-Precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Rua major pompeu 000 barra bonita`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
       );
     }
   }
@@ -233,14 +246,20 @@ Rua major pompeu 000 barra bonita`
         entrega: msg.body + " sp",
       });
       Requests.updateEtapa(msg.from, { etapa: "f" });
-    } else if (!address && message !== "voltar") {
+    } else if (
+      !address &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
-        `Esse endereço não é valido, tente novamente!
+        `Atenção ⚠️
+Esse endereço não é valido, tente novamente!
         
-Precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Rua major pompeu 000 barra bonita`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
       );
     }
   }
@@ -294,7 +313,11 @@ Vamos tentar novamente. Sobre o pagamento, por favor, escolha uma das opções �
 
   if (etapaRetrieve.etapa == "g") {
     voltar(msg.from, message, client);
-    if (message != "voltar") {
+    if (
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
         `Qual é a forma de pagamento da ENTREGA ?
@@ -329,7 +352,13 @@ Vamos tentar novamente. Sobre o pagamento, por favor, escolha uma das opções �
       });
 
       obrigadoseupedidofoifeitocomsucesso(msg.body, msg.from, client, response);
-    } else if (!um && !dois && message !== "voltar") {
+    } else if (
+      !um &&
+      !dois &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
         `Desculpa, não consegui entender sua resposta.
@@ -353,11 +382,9 @@ Por favor, escolha uma das opções ⬇️
         msg.from,
         `Digite o endereço de ENTREGA por favor.
       
-Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa e cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Exemplo: rua major pompeu 000 barra bonita
-
-Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
       );
 
       Requests.updateEntregaEmpresa({
@@ -366,14 +393,20 @@ Exemplo 2: rua antonio manfio 00 igaraçu do tietê`
         b: "b",
       });
       Requests.updateEtapa(msg.from, { etapa: "41" });
-    } else if (!address && message !== "voltar") {
+    } else if (
+      !address &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
-        `Esse endereço não é valido, tente novamente!
+        `Atenção ⚠️
+Esse endereço não é valido, tente novamente!
       
-Precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Rua major pompeu 000 barra bonita`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
       );
     }
   }
@@ -421,14 +454,20 @@ Escolha por favor uma das opções
         "5514996977366@c.us",
         `Atenção! Temos um cliente aguardando para consultar o valor da entrega.`
       );
-    } else if (!address && message !== "voltar") {
+    } else if (
+      !address &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
-        `Esse endereço não é valido, tente novamente!
+        `Atenção ⚠️
+Esse endereço não é valido, tente novamente!
       
-Precisamos que seja no formato do exemplo. Rua, numero e cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Rua major pompeu 000 barra bonita`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
       );
     }
   }
@@ -460,7 +499,13 @@ Até a próxima! Tenha um ótimo dia!`
       });
     }
 
-    if (msg.body != "1" && msg.body != "2" && message !== "voltar") {
+    if (
+      msg.body != "1" &&
+      msg.body != "2" &&
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       client.sendMessage(
         msg.from,
         `Desculpa, não consegui entender sua resposta.

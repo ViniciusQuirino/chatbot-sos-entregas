@@ -24,14 +24,23 @@ async function sosregistrarcodigo(msg, etapaRetrieve, client) {
         );
       }
     }
-    if (message !== "voltar" && msg.body.length !== 3) {
+    if (
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar" &&
+      msg.body.length !== 3
+    ) {
       client.sendMessage(msg.from, "O código precisa ser de 3 digitos.");
     }
   }
 
   if (etapaRetrieve.etapa === "y") {
     voltar(msg.from, message, client);
-    if (message !== "voltar") {
+    if (
+      message !== "voltar" &&
+      message !== "cancela" &&
+      message !== "cancelar"
+    ) {
       Requests.updateClient(etapaRetrieve.codigo, { nome: msg.body });
       Requests.updateEtapa(msg.from, { etapa: "a" });
       client.sendMessage(msg.from, "Cliente cadastrado com sucesso.");

@@ -349,29 +349,31 @@ function naoesquecadoddd(client, from) {
 function temalgumaobservacao(client, from) {
   client.sendMessage(
     from,
-    `Tem alguma observação para facilitar para nosso motoboy ?
+    `Tem alguma *Informação ou Observação* para facilitar nosso entregador?
 
-Escreva oque quiser, nosso motoboy irá ver sua observação
+Escreva oque quiser, nosso motoboy irá ver sua *Informação*
 
-Se possivel colocar numero de telefone do cliente, assim não precisamos entrar em contato com o estabelecimento caso o motoboy tenha problemas na hora da entrega.`
+Pode colocar o máximo de informação possível!
+
+_Ex: telefone do cliente caso o motoqueiro não encontre a casa._`
   );
 }
 
 function temalgumaobservacaofisica(from, client) {
   client.sendMessage(
     from,
-    `Tem alguma observação para facilitar para nosso motoboy ?
+    `Tem alguma *Informação ou Observação* para facilitar nosso entregador?
 
-Escreva oque quiser, nosso motoboy irá ver sua observação
+Escreva oque quiser, nosso motoboy irá ver sua *Informação*
 
-Por favor, coloque o máximo de informação possivel.
+Pode colocar o máximo de informação possível!
 
-Ex: telefone do cliente caso o motoqueiro não encontre a casa.`
+_Ex: telefone do cliente caso o motoqueiro não encontre a casa._`
   );
 }
 
 function voltar(from, body, client) {
-  if (body === "voltar") {
+  if (body === "cancela" || body === "cancelar" || body === "voltar") {
     Requests.updateEtapa(from, { etapa: "a" });
     client.sendMessage(from, `Você voltou para o inicío. Comece novamente!`);
   }
@@ -380,13 +382,11 @@ function voltar(from, body, client) {
 function digiteoenderecodecoleta(from, client) {
   client.sendMessage(
     from,
-    `Digite o endereço de COLETA por favor.
+    `Digite o endereço de *COLETA* por favor.
 
-Precisamos que seja nesse formato do exemplo, nome da rua, numero da casa, cidade.
+Precisamos que seja nesse formato do exemplo:
 
-Exemplo: rua quatorze de dezembro 449 barra bonita
-
-Exemplo 2: rua florindo dias silva 37 igaraçu do tietê`
+*RUA, NUMERO DA CASA E NOME DA CIDADE*`
   );
 }
 
@@ -412,7 +412,7 @@ async function obrigadoseupedidofoifeitocomsucesso(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "326b3f2b4c9f4bcdb48363c0d023260c",
+        Authorization: "a39577713122403da50f7e0a7656db39",
       },
       body: JSON.stringify(data),
     }
@@ -493,8 +493,12 @@ Banco Cora`
 }
 
 function cronJob() {
+  const date = new Date();
+  const h = date.getHours();
   const job = new CronJob("0 * * * *", async () => {
-    Requests.requestCronJob();
+    if (h >= 10 && h <= 23) {
+      Requests.requestCronJob();
+    }
   });
   job.start();
 }
