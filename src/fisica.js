@@ -99,7 +99,7 @@ Por favor, escolha uma das opções, digite apenas o numero. ⬇️
       digiteoenderecodecoleta(msg.from, client);
       Requests.createEntregaEmpresa({
         telefone: msg.from,
-        obs: "Barra x Barra 8,00",
+        obs: "Barra x Barra",
         codigo: "300",
       });
       Requests.updateEtapa(msg.from, { etapa: "d" });
@@ -380,8 +380,9 @@ Por favor, escolha uma das opções ⬇️
     if (address) {
       client.sendMessage(
         msg.from,
-        `Digite o endereço de ENTREGA por favor.
-      
+        `Uhuul 😁
+Agora digite o endereço de *ENTREGA* por favor.
+
 Precisamos que seja nesse formato do exemplo:
 
 *RUA, NUMERO DA CASA E NOME DA CIDADE*`
