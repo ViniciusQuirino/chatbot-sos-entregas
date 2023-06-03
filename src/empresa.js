@@ -15,7 +15,7 @@ async function empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client) {
   if (codigotelefone && etapaRetrieve.etapa === "a" && a !== "/") {
     client.sendMessage(
       msg.from,
-      `Olá ${msgNumber.nome}, bora fazer mais um pedido de entrega ?!😁
+      `Olá *${msgNumber.nome}*, bora fazer mais um pedido de entrega ?!😁
 
 Digite o endereço de *ENTREGA* por favor.
         

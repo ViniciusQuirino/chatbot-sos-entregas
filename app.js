@@ -80,9 +80,6 @@ const client = new Client({
 });
 
 client.on("message", async (msg) => {
-  // if (msg.body == "Oi") {
-  //   client.sendMessage(msg.from, "salve");
-  // }
 
   let msgNumber = await checkingNumbers(msg);
   let etapaRetrieve = await Requests.retrieveEtapa(msg);
