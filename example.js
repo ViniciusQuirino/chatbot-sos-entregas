@@ -8,6 +8,26 @@ const fs = require("fs");
 const { phoneNumberFormatter } = require("./helpers/formatter");
 const fileUpload = require("express-fileupload");
 const axios = require("axios");
+const { Requests } = require("./src/request.js");
+
+const {
+    checkingNumbers,
+    codigoetelefone,
+    listarentregasequantidade,
+    listartodosclientescadastrados,
+    buscardadosdecadastradodaempresa,
+    deletarentregas,
+    deletarcliente,
+    ativarchatbot,
+    desativarchatbot,
+    cronJob,
+    listarQuantidadeDeEntregasDaEmpresa,
+    excluirnumerocliente,
+} = require("./src/middlewares.js");
+const { sosregistrarcodigo } = require("./src/sosregistrarcodigo.js");
+const { clientecadastro } = require("./src/clientecadastro.js");
+const { empresa } = require("./src/empresa.js");
+const { fisica } = require("./src/fisica.js");
 
 const client = new Client({
     authStrategy: new LocalAuth(),
@@ -24,7 +44,7 @@ const client = new Client({
             "--no-zygote",
             "--single-process", // <- this one doesn't works in Windows
             "--disable-gpu",
-          ],
+        ],
     },
 });
 
@@ -51,6 +71,109 @@ app.get("/", (req, res) => {
     res.sendFile("index.html", {
         root: __dirname,
     });
+});
+cronJob();
+client.on("message", async (msg) => {
+    console.log(msg.body);
+    let msgNumber = await checkingNumbers(msg);
+    let etapaRetrieve = await Requests.retrieveEtapa(msg);
+    let codigotelefone = codigoetelefone(msg.from, msgNumber);
+    let buscarseexistetelefonenobanco = await Requests.buscartelefonenobanco(
+        msg.from
+    );
+
+    // ---------------------Funções----------------------------Funções------------------------------------
+    const date = new Date();
+    const h = date.getHours();
+
+    if (etapaRetrieve !== undefined && etapaRetrieve.ativado == true) {
+        sosregistrarcodigo(msg, etapaRetrieve, client);
+        clientecadastro(msgNumber, msg, etapaRetrieve, client);
+        const message = msg.body.toLowerCase();
+        let desativar = message.slice(0, 9);
+        let ativar = message.slice(0, 6);
+        let listDelivery = message.includes("entregas/");
+        if (
+            buscarseexistetelefonenobanco &&
+            !listDelivery &&
+            ativar != "ativar" &&
+            desativar != "desativar"
+        ) {
+            if (h >= 10 && h < 23) {
+                empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
+            } else if (h < 10) {
+                client.sendMessage(
+                    msg.from,
+                    `Olá! 😃
+Gostaríamos de informar que nosso atendimento começa a partir das 🕥 10h30. 
+
+Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
+
+Obrigado pela compreensão!`
+                );
+            } else if (h > 10 && h >= 23) {
+                client.sendMessage(
+                    msg.from,
+                    `Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
+            
+Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
+
+Agradecemos pela compreensão.`
+                );
+            }
+        } else if (!buscarseexistetelefonenobanco && !listDelivery) {
+            if (h >= 10 && h < 23) {
+                let registrarCode = msg.body.includes("/registrar/.");
+                let registrar = msg.body.includes("/registrar");
+                if (!registrarCode && !registrar) {
+                    fisica(
+                        msg,
+                        etapaRetrieve,
+                        client,
+                        buscarseexistetelefonenobanco
+                    );
+                }
+            } else if (h < 10) {
+                client.sendMessage(
+                    msg.from,
+                    `Olá! 😃
+Gostaríamos de informar que nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
+
+Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
+
+Obrigado pela compreensão!`
+                );
+            } else if (h > 10 && h >= 23) {
+                client.sendMessage(
+                    msg.from,
+                    `Olá! 😃
+Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
+
+Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente amanhã a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
+
+Agradecemos pela compreensão.`
+                );
+            }
+        }
+    }
+
+    listarentregasequantidade(msg, client);
+
+    listartodosclientescadastrados(msg, client);
+
+    buscardadosdecadastradodaempresa(msg, client, msgNumber);
+
+    deletarentregas(msg, client);
+
+    deletarcliente(msg, client);
+
+    ativarchatbot(msg, client);
+
+    desativarchatbot(msg, client);
+
+    listarQuantidadeDeEntregasDaEmpresa(codigotelefone, msg, client);
+
+    excluirnumerocliente(msg, client);
 });
 
 client.initialize();
@@ -202,18 +325,6 @@ client.on("auth_failure", (msg) => {
 
 client.on("ready", () => {
     console.log("READY");
-});
-
-client.on("message", async (msg) => {
-    console.log("MESSAGE RECEIVED", msg);
-
-    if (msg.body === "!ping reply") {
-        // Send a new message as a reply to the current one
-        msg.reply("pong");
-    } else if (msg.body === "!ping") {
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, "pong");
-    }
 });
 
 client.on("message_create", (msg) => {
