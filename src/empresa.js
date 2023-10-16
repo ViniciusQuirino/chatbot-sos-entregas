@@ -1,6 +1,6 @@
 const { Requests } = require("./request.js");
 const { checkingAddress, temalgumaobservacao } = require("./middlewares.js");
-const { voltar } = require("./middlewares.js");
+const { voltarEmpresa } = require("./middlewares.js");
 
 // msgNumber = Dados do cliente
 // etapaRetrieve = verifica se é numero privado e retorna a etapa
@@ -33,7 +33,7 @@ Precisamos que seja nesse formato do exemplo:
   }
 
   if (etapaRetrieve.etapa === "b") {
-    voltar(msg.from, message, client);
+    voltarEmpresa(msg.from, message, client);
     const address = checkingAddress(msg);
 
     if (address) {
@@ -69,7 +69,7 @@ Precisamos que seja nesse formato do exemplo:
   }
 
   if (etapaRetrieve.etapa === "c") {
-    voltar(msg.from, message, client);
+    voltarEmpresa(msg.from, message, client);
     let um = msg.body.includes("1");
     let dois = msg.body.includes("2");
     let tres = msg.body.includes("3");
@@ -123,7 +123,7 @@ Por favor, escolha uma das opções ⬇️
   }
 
   if (etapaRetrieve.etapa === "d") {
-    voltar(msg.from, message, client);
+    voltarEmpresa(msg.from, message, client);
     if (
       message !== "voltar" &&
       message !== "cancela" &&

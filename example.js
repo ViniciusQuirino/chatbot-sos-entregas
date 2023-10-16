@@ -72,9 +72,10 @@ app.get("/", (req, res) => {
         root: __dirname,
     });
 });
-cronJob();
+// cronJob();
 client.on("message", async (msg) => {
-    console.log(msg.body);
+    console.log(msg.body)
+
     let msgNumber = await checkingNumbers(msg);
     let etapaRetrieve = await Requests.retrieveEtapa(msg);
     let codigotelefone = codigoetelefone(msg.from, msgNumber);
@@ -216,6 +217,74 @@ const checkRegisteredNumber = async function (number) {
     const isRegistered = await client.isRegisteredUser(number);
     return isRegistered;
 };
+
+const findGroupByName = async function (name) {
+    const group = await client.getChats().then((chats) => {
+        return chats.find(
+            (chat) =>
+                chat.isGroup && chat.name.toLowerCase() == name.toLowerCase()
+        );
+    });
+    return group;
+};
+
+// Send message to group
+// You can use chatID or group name, yea!
+app.post(
+    "/send-group-message",
+    [
+        body("id").custom((value, { req }) => {
+            if (!value && !req.body.name) {
+                throw new Error("Invalid value, you can use `id` or `name`");
+            }
+            return true;
+        }),
+        body("message").notEmpty(),
+    ],
+    async (req, res) => {
+        const errors = validationResult(req).formatWith(({ msg }) => {
+            return msg;
+        });
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({
+                status: false,
+                message: errors.mapped(),
+            });
+        }
+
+        let chatId = req.body.id;
+        const groupName = req.body.name;
+        const message = req.body.message;
+
+        // Find the group by name
+        if (!chatId) {
+            const group = await findGroupByName(groupName);
+            if (!group) {
+                return res.status(422).json({
+                    status: false,
+                    message: "No group found with name: " + groupName,
+                });
+            }
+            chatId = group.id._serialized;
+        }
+
+        client
+            .sendMessage(chatId, message)
+            .then((response) => {
+                res.status(200).json({
+                    status: true,
+                    response: response,
+                });
+            })
+            .catch((err) => {
+                res.status(500).json({
+                    status: false,
+                    response: err,
+                });
+            });
+    }
+);
 
 // Send message
 app.post(
@@ -392,14 +461,11 @@ client.on("call", async (call) => {
     if (rejectCalls) await call.reject();
     await client.sendMessage(
         call.from,
-        `[${call.fromMe ? "Outgoing" : "Incoming"}] Phone call from ${
-            call.from
-        }, type ${call.isGroup ? "group" : ""} ${
-            call.isVideo ? "video" : "audio"
-        } call. ${
-            rejectCalls
-                ? "This call was automatically rejected by the script."
-                : ""
+        `[${call.fromMe ? "Outgoing" : "Incoming"}] Phone call from ${call.from
+        }, type ${call.isGroup ? "group" : ""} ${call.isVideo ? "video" : "audio"
+        } call. ${rejectCalls
+            ? "This call was automatically rejected by the script."
+            : ""
         }`
     );
 });
@@ -414,17 +480,15 @@ client.on("contact_changed", async (message, oldId, newId, isContact) => {
 
     console.log(
         `The contact ${oldId.slice(0, -5)}` +
-            `${
-                !isContact
-                    ? " that participates in group " +
-                      `${
-                          (await client.getChatById(message.to ?? message.from))
-                              .name
-                      } `
-                    : " "
-            }` +
-            `changed their phone number\nat ${eventTime}.\n` +
-            `Their new phone number is ${newId.slice(0, -5)}.\n`
+        `${!isContact
+            ? " that participates in group " +
+            `${(await client.getChatById(message.to ?? message.from))
+                .name
+            } `
+            : " "
+        }` +
+        `changed their phone number\nat ${eventTime}.\n` +
+        `Their new phone number is ${newId.slice(0, -5)}.\n`
     );
 
     /**

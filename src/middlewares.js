@@ -486,13 +486,59 @@ _Ex: telefone do cliente caso o motoqueiro não encontre a casa._`
     );
 }
 
-function voltar(from, body, client) {
+function voltarFisica(from, body, client) {
     if (body === "cancela" || body === "cancelar" || body === "voltar") {
-        Requests.updateEtapa(from, { etapa: "a" });
+        Requests.updateEtapa(from, { etapa: "b" });
+        client.sendMessage(from, "Ok, errar é humano e está tudo bem 😄");
+
         client.sendMessage(
             from,
-            `Você voltou para o inicío. Comece novamente!`
+          "Voltamos para o início para que possa refazer seu pedido."
         );
+
+        client.sendMessage(
+            from,
+            `Oque você deseja nesse momento ?
+
+Digite apenas o numero da opção.
+⬇️
+
+*1* - Solicitar um motoboy para fazer um, *pedido de entrega / ou consultar valores.*
+
+*2* - Falar com um representante sobre; *vaga de emprego, parceria com estabelecimento, ou outros assuntos?*`
+        );
+    }
+}
+
+function voltarEmpresa(from, body, client) {
+
+    if (body === "cancela" || body === "cancelar" || body === "voltar") {
+        Requests.updateEtapa(from, { etapa: "a" });
+        client.sendMessage(from, "Ok, errar é humano e está tudo bem 😄");
+
+        client.sendMessage(
+            from,
+          "Voltamos para o início para que possa refazer seu pedido."
+        );
+
+        client.sendMessage(
+            from,
+            `Digite o código cadastrado para começar novamente!`
+        );
+    }
+}
+
+
+function voltar(from, body, client) {
+
+    if (body === "cancela" || body === "cancelar" || body === "voltar") {
+        Requests.updateEtapa(from, { etapa: "a" });
+        client.sendMessage(from, "Ok, errar é humano e está tudo bem 😄");
+
+        client.sendMessage(
+            from,
+          "Você voltou para o inicío. Comece novamente!"
+        );  
     }
 }
 
@@ -508,7 +554,6 @@ Precisamos que seja nesse formato do exemplo:
 }
 
 async function obrigadoseupedidofoifeitocomsucesso(
-    body,
     from,
     client,
     response
@@ -574,17 +619,19 @@ Assim que um de nossos entregadores aceitar seu pedido você será notificado.
 
 Lembrando que coletas são de 0 a 15 minutos em dias normais.
 
-Numero do pedido: ${response.id}
-Lugares: ${splitArray[0]}
+*Numero do pedido:* ${response.id}
+*Lugares:* ${splitArray[0]}
 
-Endereço de coleta: ${splitArray[1]}
-Endereço de entrega: ${response.entrega}
+*Endereço de coleta:* ${splitArray[1]}
 
-Observação: ${splitArray[2]} - ${splitArray[3]}
-Forma de pagamento: ${response.formadepagamento == "pix" ? "Pix" : "Dinheiro"}`
+*Endereço de entrega:* ${response.entrega}
+
+*Observação:* ${splitArray[2]} - ${splitArray[3]}
+
+*Forma de pagamento:* ${response.formadepagamento == "pix" ? "Pix" : "Dinheiro"}`
         );
 
-        if (body == "1") {
+        if (response.formadepagamento == "pix") {
             client.sendMessage(
                 from,
                 `Assim que terminar de fazer o pix, nos envie o comprovante. 😃`
@@ -604,7 +651,7 @@ Banco Cora`
         }
     }
 
-    if (body == "2") {
+    if (response.formadepagamento == "money") {
         Requests.updateEtapa(from, { etapa: "a" });
     }
 }
@@ -661,6 +708,8 @@ module.exports = {
     naoexistenumerotelefonedessetamanho,
     naoesquecadoddd,
     temalgumaobservacao,
+    voltarFisica,
+    voltarEmpresa,
     voltar,
     listarentregasequantidade,
     listartodosclientescadastrados,
