@@ -237,12 +237,15 @@ Precisamos que seja nesse formato do exemplo:
             client.sendMessage(
                 msg.from,
                 `Atenção ⚠️
-Esse endereço não é valido, tente novamente!
+Esse endereço não é valido, *tente novamente segundo os requisitos abaixo ⬇️
 
-Precisamos que seja nesse formato do exemplo:
 
-*RUA, NUMERO DA CASA E NOME DA CIDADE*`
-            );
+*NOME DA RUA 🛣️*
+
+*NUMERO DA CASA 🔢*
+
+*CIDADE SE É BARRA BONITA OU IGARAÇU DO TIETE 🏘️*`
+              );
         }
     }
 
@@ -277,12 +280,15 @@ Precisamos que seja nesse formato do exemplo:
             client.sendMessage(
                 msg.from,
                 `Atenção ⚠️
-Esse endereço não é valido, tente novamente!
+Esse endereço não é valido, *tente novamente segundo os requisitos abaixo ⬇️
 
-Precisamos que seja nesse formato do exemplo:
 
-*RUA, NUMERO DA CASA E NOME DA CIDADE*`
-            );
+*NOME DA RUA 🛣️*
+
+*NUMERO DA CASA 🔢*
+
+*CIDADE SE É BARRA BONITA OU IGARAÇU DO TIETE 🏘️*`
+              );
         }
     }
 
@@ -398,12 +404,15 @@ Precisamos que seja nesse formato do exemplo:
             client.sendMessage(
                 msg.from,
                 `Atenção ⚠️
-Esse endereço não é valido, tente novamente!
+Esse endereço não é valido, *tente novamente segundo os requisitos abaixo ⬇️
 
-Precisamos que seja nesse formato do exemplo:
 
-*RUA, NUMERO DA CASA E NOME DA CIDADE*`
-            );
+*NOME DA RUA 🛣️*
+
+*NUMERO DA CASA 🔢*
+
+*CIDADE SE É BARRA BONITA OU IGARAÇU DO TIETE 🏘️*`
+              );
         }
     }
 
@@ -460,12 +469,15 @@ Escolha por favor uma das opções
             client.sendMessage(
                 msg.from,
                 `Atenção ⚠️
-Esse endereço não é valido, tente novamente!
+Esse endereço não é valido, *tente novamente segundo os requisitos abaixo ⬇️
 
-Precisamos que seja nesse formato do exemplo:
 
-*RUA, NUMERO DA CASA E NOME DA CIDADE*`
-            );
+*NOME DA RUA 🛣️*
+
+*NUMERO DA CASA 🔢*
+
+*CIDADE SE É BARRA BONITA OU IGARAÇU DO TIETE 🏘️*`
+              );
         }
     }
 

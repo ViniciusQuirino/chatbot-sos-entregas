@@ -59,11 +59,14 @@ Precisamos que seja nesse formato do exemplo:
       client.sendMessage(
         msg.from,
         `Atenção ⚠️
-Esse endereço não é valido, tente novamente!
-        
-Precisamos que seja nesse formato do exemplo:
+Esse endereço não é valido, *tente novamente segundo os requisitos abaixo ⬇️
 
-*RUA, NUMERO DA CASA E NOME DA CIDADE*`
+
+*NOME DA RUA 🛣️*
+
+*NUMERO DA CASA 🔢*
+
+*CIDADE SE É BARRA BONITA OU IGARAÇU DO TIETE 🏘️*`
       );
     }
   }
