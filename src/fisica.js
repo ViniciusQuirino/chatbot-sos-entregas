@@ -515,8 +515,8 @@ Vamos tentar novamente. Você deseja mesmo assim finalizar o pedido de entrega ?
 
 Por favor, escolha uma das opções ⬇️
 
-1 - Sim, desejo continuar
-2 - Não.`
+*1* - Sim, desejo continuar
+*2* - Não.`
             );
         }
     }

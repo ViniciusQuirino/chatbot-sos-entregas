@@ -45,9 +45,9 @@ Precisamos que seja nesse formato do exemplo:
         msg.from,
         `Qual é a forma de pagamento ?
   
-1 - Cartão
-2 - Dinheiro
-3 - Pago, Pix, Pagamento online`
+*1* - Cartão
+*2* - Dinheiro
+*3* - Pago, Pix, Pagamento online`
       );
       Requests.updateEtapa(msg.from, { etapa: "c" });
     } else if (
@@ -115,9 +115,9 @@ Vamos tentar novamente, qual é a forma de pagamento ?
 
 Por favor, escolha uma das opções ⬇️
 
-1 - Cartão
-2 - Dinheiro
-3 - Pago, Pix, Pagamento online`
+*1* - Cartão
+*2* - Dinheiro
+*3* - Pago, Pix, Pagamento online`
       );
     }
   }
@@ -192,9 +192,9 @@ Assim que um de nossos entregadores aceitar seu pedido você será notificado.
 
 Lembrando que coletas são de 0 a 15 minutos em dias normais.
 
-Numero do pedido: ${response.id}
-Endereço de entrega: ${response.entrega}
-Observação: ${response.obs}`
+*Numero do pedido:* ${response.id}
+*Endereço de entrega:* ${response.entrega}
+*Observação:* ${response.obs}`
         );
 
         Requests.updateEtapa(msg.from, { etapa: "a" });
