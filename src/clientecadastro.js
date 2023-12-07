@@ -120,7 +120,7 @@ Ex de resposta:
     // ----------------Quero cadastrar o token, não precisa pergunta se já cadastrou!----------------------------------------------------------------
     if (etapaRetrieve.etapa === "20") {
         voltar(msg.from, message, client);
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -139,7 +139,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -151,7 +151,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "a" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -168,7 +168,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -179,7 +179,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "a" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -197,7 +197,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -208,7 +208,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "a" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -226,7 +226,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -238,7 +238,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "a" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -254,14 +254,14 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
     // -----------Quero cadastrar ou editar os números de WhatsApp, precisa pergunta se já cadastrou o token----
     if (etapaRetrieve.etapa === "4") {
         voltar(msg.from, message, client);
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -280,7 +280,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -292,7 +292,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "10" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -312,7 +312,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -323,7 +323,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "10" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -341,7 +341,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -352,7 +352,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "10" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -370,7 +370,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }
@@ -382,7 +382,7 @@ Ex de resposta:
             Requests.updateEtapa(msg.from, { etapa: "10" });
         }
 
-        if (msg.body.length === 11) {
+        if (msg.body.length === 11 || msg.body.length === 10) {
             const response = await Requests.retrieveClient(
                 etapaRetrieve.codigo
             );
@@ -399,7 +399,7 @@ Ex de resposta:
             }
         } else if (msg.body.length > 11) {
             naoexistenumerotelefonedessetamanho(client, msg.from);
-        } else if (msg.body.length < 11 && msg.body !== "1") {
+        } else if (msg.body.length < 10 && msg.body !== "1") {
             naoesquecadoddd(client, msg.from);
         }
     }

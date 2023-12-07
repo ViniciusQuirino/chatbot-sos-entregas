@@ -239,7 +239,7 @@ async function ativarchatbot(msg, client) {
     if (ativar == "ativar") {
         if (
             msg.from == "5514996977366@c.us" ||
-            msg.from == "5514991342480@c.us" ||
+            msg.from == "5514988088702@c.us" ||
             msg.from == "5514998536591@c.us"
         ) {
             try {
@@ -267,7 +267,7 @@ async function desativarchatbot(msg, client) {
     if (desativar == "desativar") {
         if (
             msg.from == "5514996977366@c.us" ||
-            msg.from == "5514991342480@c.us" ||
+            msg.from == "5514988088702@c.us" ||
             msg.from == "5514998536591@c.us"
         ) {
             try {
