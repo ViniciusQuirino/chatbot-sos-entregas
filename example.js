@@ -87,125 +87,94 @@ client.on("message", async (msg) => {
     const date = new Date();
     const h = date.getHours();
 
-    const dataInicioNatal = new Date("2023-12-23T11:01:00"); // 23/12 às 11:01
-    const dataFimNatal = new Date("2023-12-25T23:59:59"); // 25/12 às 23:59:59
-
-    const dataInicioAno = new Date("2023-12-29T11:01:00");
-    const dataFimAno = new Date("2024-01-01T11:59:59");
-
-    // Verifica se a data atual está dentro do intervalo
-    if (date >= dataInicioNatal && date <= dataFimNatal) {
-        client.sendMessage(
-            msg.from,
-            `Olá!
-
-Não estamos atendendo📡.
-
-Retornaremos no dia 26/12 as 10:30 🕥
-
-A SOS entregas deseja à você e sua família, um Feliz 😁 Natal 🎄 e Que Deus abençoe todos nós🙏🏻!`
-        );
-    } else if (date >= dataInicioAno && date <= dataFimAno) {
-        client.sendMessage(
-            msg.from,
-            `Olá!
-
-Não estamos atendendo📡.
-
-Retornaremos no dia 02/01/2024 as 10:30 🕥
-
-A SOS entregas deseja à você e sua família, um Próspero ano Novo 🎆, com muita Saúde, Paz e Amor e que Deus abençoe todos nós🙏🏻!`
-        );
-    } else {
-        if (etapaRetrieve !== undefined && etapaRetrieve.ativado == true) {
-            sosregistrarcodigo(msg, etapaRetrieve, client);
-            clientecadastro(msgNumber, msg, etapaRetrieve, client);
-            const message = msg.body.toLowerCase();
-            let desativar = message.slice(0, 9);
-            let ativar = message.slice(0, 6);
-            let listDelivery = message.includes("entregas/");
-            if (
-                buscarseexistetelefonenobanco &&
-                !listDelivery &&
-                ativar != "ativar" &&
-                desativar != "desativar"
-            ) {
-                if (h >= 10 && h < 23) {
-                    empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
-                } else if (h < 10) {
-                    client.sendMessage(
-                        msg.from,
-                        `Olá! 😃
+    if (etapaRetrieve !== undefined && etapaRetrieve.ativado == true) {
+        sosregistrarcodigo(msg, etapaRetrieve, client);
+        clientecadastro(msgNumber, msg, etapaRetrieve, client);
+        const message = msg.body.toLowerCase();
+        let desativar = message.slice(0, 9);
+        let ativar = message.slice(0, 6);
+        let listDelivery = message.includes("entregas/");
+        if (
+            buscarseexistetelefonenobanco &&
+            !listDelivery &&
+            ativar != "ativar" &&
+            desativar != "desativar"
+        ) {
+            if (h >= 10 && h < 23) {
+                empresa(msg, msgNumber, etapaRetrieve, codigotelefone, client);
+            } else if (h < 10) {
+                client.sendMessage(
+                    msg.from,
+                    `Olá! 😃
     Gostaríamos de informar que nosso atendimento começa a partir das 🕥 10h30. 
     
     Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
     
     Obrigado pela compreensão!`
-                    );
-                } else if (h > 10 && h >= 23) {
-                    client.sendMessage(
-                        msg.from,
-                        `Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
+                );
+            } else if (h > 10 && h >= 23) {
+                client.sendMessage(
+                    msg.from,
+                    `Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
                 
     Se você tiver alguma dúvida ou precisar de assistência nos mande uma mensagem no grupo de whatsApp.
     
     Agradecemos pela compreensão.`
+                );
+            }
+        } else if (!buscarseexistetelefonenobanco && !listDelivery) {
+            if (h >= 10 && h < 23) {
+                let registrarCode = msg.body.includes("/registrar/.");
+                let registrar = msg.body.includes("/registrar");
+                if (!registrarCode && !registrar) {
+                    fisica(
+                        msg,
+                        etapaRetrieve,
+                        client,
+                        buscarseexistetelefonenobanco
                     );
                 }
-            } else if (!buscarseexistetelefonenobanco && !listDelivery) {
-                if (h >= 10 && h < 23) {
-                    let registrarCode = msg.body.includes("/registrar/.");
-                    let registrar = msg.body.includes("/registrar");
-                    if (!registrarCode && !registrar) {
-                        fisica(
-                            msg,
-                            etapaRetrieve,
-                            client,
-                            buscarseexistetelefonenobanco
-                        );
-                    }
-                } else if (h < 10) {
-                    client.sendMessage(
-                        msg.from,
-                        `Olá! 😃
+            } else if (h < 10) {
+                client.sendMessage(
+                    msg.from,
+                    `Olá! 😃
     Gostaríamos de informar que nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
     
     Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
     
     Obrigado pela compreensão!`
-                    );
-                } else if (h > 10 && h >= 23) {
-                    client.sendMessage(
-                        msg.from,
-                        `Olá! 😃
+                );
+            } else if (h > 10 && h >= 23) {
+                client.sendMessage(
+                    msg.from,
+                    `Olá! 😃
     Pedimos desculpas pelo inconveniente, pois nosso horário de atendimento é das 🕥 10h30 até às 23h00 🕙.
     
     Se você tiver alguma dúvida ou precisar de assistência recomendamos que entre em contato conosco novamente amanhã a partir das 🕙 10h00, quando retomaremos nossas atividades. 🏍️
     
     Agradecemos pela compreensão.`
-                    );
-                }
+                );
             }
         }
-    
-        listarentregasequantidade(msg, client);
-    
-        listartodosclientescadastrados(msg, client);
-    
-        buscardadosdecadastradodaempresa(msg, client, msgNumber);
-    
-        deletarentregas(msg, client);
-    
-        deletarcliente(msg, client);
-    
-        ativarchatbot(msg, client);
-    
-        desativarchatbot(msg, client);
-    
-        listarQuantidadeDeEntregasDaEmpresa(codigotelefone, msg, client);
-    
-        excluirnumerocliente(msg, client);
     }
+
+    listarentregasequantidade(msg, client);
+
+    listartodosclientescadastrados(msg, client);
+
+    buscardadosdecadastradodaempresa(msg, client, msgNumber);
+
+    deletarentregas(msg, client);
+
+    deletarcliente(msg, client);
+
+    ativarchatbot(msg, client);
+
+    desativarchatbot(msg, client);
+
+    listarQuantidadeDeEntregasDaEmpresa(codigotelefone, msg, client);
+
+    excluirnumerocliente(msg, client);
 });
 
 client.initialize();
