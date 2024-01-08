@@ -364,9 +364,10 @@ Vamos tentar novamente. Sobre o pagamento, escolha uma das alternativas. _*Aten√
             message !== "cancela" &&
             message !== "cancelar"
         ) {
+            let numero = msg.from.slice(2, -5);
             const response = await Requests.updateEntregaEmpresa({
                 telefone: msg.from,
-                obs: `Obs: ${msg.body} - Telefone: ${msg.from}`,
+                obs: `Obs: ${msg.body} - Telefone: ${numero}`,
                 b: "b",
             });
             console.log(response)
