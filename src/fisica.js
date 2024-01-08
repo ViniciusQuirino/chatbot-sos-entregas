@@ -366,7 +366,7 @@ Vamos tentar novamente. Sobre o pagamento, escolha uma das alternativas. _*Aten√
         ) {
             const response = await Requests.updateEntregaEmpresa({
                 telefone: msg.from,
-                obs: `Obs: ${msg.body}`,
+                obs: `Obs: ${msg.body} - Telefone: ${msg.from}`,
                 b: "b",
             });
             console.log(response)
